@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Backend.Application.Brands.Models;
+using Backend.Application.Products.Models;
 using Backend.Application.Users.Models;
 using Backend.Data.EF;
 using Backend.Data.Entities;
@@ -20,6 +21,8 @@ namespace Backend.Application.Common.Mapper
             CreateMap<User, UserVm>();
 
             CreateMap<CreateBrandResource, Brand>();
+
+            CreateMap<CreateProductResource, Product>();
         }
     }
 }

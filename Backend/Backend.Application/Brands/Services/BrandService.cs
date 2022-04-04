@@ -7,7 +7,9 @@ using Backend.Application.Brands.Models;
 using Backend.Application.Common.Models;
 using Backend.Data.Entities;
 using Backend.Repository.UnitOfWork;
+using Backend.Utilities.SystemConstants;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 
 namespace Backend.Application.Brands.Services
@@ -17,11 +19,13 @@ namespace Backend.Application.Brands.Services
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<User> _userManager;
 
-        public BrandService(IMapper mapper, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork)
+        public BrandService(IMapper mapper, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork, UserManager<User> userManager)
         {
             _mapper = mapper; _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         public async Task<ApiResult<List<Brand>>> GetAllAsync()
@@ -63,10 +67,17 @@ namespace Backend.Application.Brands.Services
             brand.UserId = int.Parse(userId);
             brand.TotalRate = 0;
 
+            var user = await _userManager.FindByIdAsync(userId);
+            var result = await _userManager.AddToRoleAsync(user, Constants.PARTNER_ROLE_NAME);
+
+            if (!result.Succeeded)
+                return await Task.FromResult(new ApiErrorResult<string>("Không thể thêm thương hiệu"));
+
             await _unitOfWork.Brands.CreateAsync(brand);
             await _unitOfWork.SaveChangesAsync();
 
             return await Task.FromResult(new ApiSuccessResult<string>("Thêm thương hiệu thành công"));
+
         }
 
         public async Task<ApiResult<string>> UpdatePatchAsync(int id, JsonPatchDocument patchDocument)
@@ -81,6 +92,14 @@ namespace Backend.Application.Brands.Services
             }
 
             patchDocument.ApplyTo(brand);
+
+            //var currentBrand = _unitOfWork.Brands.FindByCondition(x => x.Name == brand.Name).FirstOrDefault();
+
+            //if (currentBrand != null)
+            //{
+            //    return await Task.FromResult(new ApiSuccessResult<string>("Tên thương hiệu đã tồn tại"));
+            //}
+
             await _unitOfWork.SaveChangesAsync();
 
             return await Task.FromResult(new ApiSuccessResult<string>("Cập nhật thương hiệu thành công"));

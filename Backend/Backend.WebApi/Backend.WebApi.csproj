@@ -24,8 +24,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Backend.Application\Backend.Application.csproj" />
+    <ProjectReference Include="..\Backend.Infrastructure\Backend.Infrastructure.csproj" />
     <ProjectReference Include="..\Backend.PostgresSqlMigrations\Backend.PostgresSqlMigrations.csproj" />
     <ProjectReference Include="..\Backend.SqlServerMigrations\Backend.SqlServerMigrations.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 

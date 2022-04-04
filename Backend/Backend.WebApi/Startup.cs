@@ -4,10 +4,11 @@ using AutoMapper;
 using Backend.Application.Authentications.Services;
 using Backend.Application.Brands.Services;
 using Backend.Application.Common.Mapper;
+using Backend.Application.Products.Services;
 using Backend.Application.Users.Services;
 using Backend.Data.EF;
 using Backend.Data.Entities;
-using Backend.Repository.Brand;
+using Backend.Infrastructure.FileImage;
 using Backend.Repository.UnitOfWork;
 using Backend.WebApi.ActionFilters;
 using MediatR;
@@ -37,6 +38,8 @@ namespace Backend.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             // Model state validation filter ASP.NET Core
             services.AddScoped<ValidationFilterAttribute>();
 
@@ -134,6 +137,8 @@ namespace Backend.WebApi
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IBrandService, BrandService>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IStorageService, FileStorageService>();
             services.AddTransient<UserManager<User>, UserManager<User>>();
             services.AddTransient<SignInManager<User>, SignInManager<User>>();
 

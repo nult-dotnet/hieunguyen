@@ -36,7 +36,7 @@ namespace Backend.WebApi.Controllers
         }
 
         [HttpPatch("update/{id}")]
-        [Authorize]
+        [AuthorizeRoles(Constants.PARTNER, Constants.USER)]
         public async Task<IActionResult> UpdatePatch(int id, JsonPatchDocument request)
         {
             var model = new UpdateBrandPatchCommand(id, request);
@@ -44,7 +44,7 @@ namespace Backend.WebApi.Controllers
         }
 
         [HttpGet("get-all")]
-        [AuthorizeRoles(Constants.ADMIN)]
+        [Authorize(Constants.ADMIN)]
         public async Task<IActionResult> GetAll()
         {
             var model = new GetAllBrandQuery();

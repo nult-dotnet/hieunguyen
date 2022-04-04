@@ -77,7 +77,7 @@ namespace Backend.Application.Authentications.Services
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, string.Join(";", roles)),
+                new Claim(ClaimTypes.Role, string.Join(",", roles)),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };

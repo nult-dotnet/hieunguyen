@@ -6,12 +6,14 @@
 
         public const string USER_ROLE_NAME = "USER";
 
+        public const string PARTNER_ROLE_NAME = "PARTNER";
+
         public const string ADMIN_ROLE_NAME = "ADMIN";
 
         public const string ADMIN = "Admin";
 
-        public const string EMP = "Emp";
-
         public const string USER = "User";
+
+        public const string PARTNER = "Partner";
     }
 }

@@ -36,6 +36,9 @@ namespace Backend.SqlServerMigrations.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -100,7 +103,7 @@ namespace Backend.SqlServerMigrations.Migrations
                             Id = 1,
                             Alias = "laptop-dell",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 4, 6, 40, 5, 631, DateTimeKind.Local).AddTicks(3618),
+                            CreatedDate = new DateTime(2022, 4, 4, 13, 1, 17, 222, DateTimeKind.Local).AddTicks(5430),
                             Name = "Laptop Dell",
                             ProductTypeId = 4
                         },
@@ -109,7 +112,7 @@ namespace Backend.SqlServerMigrations.Migrations
                             Id = 2,
                             Alias = "laptop-macbook",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 4, 6, 40, 5, 632, DateTimeKind.Local).AddTicks(719),
+                            CreatedDate = new DateTime(2022, 4, 4, 13, 1, 17, 223, DateTimeKind.Local).AddTicks(3778),
                             Name = "Laptop Macbook",
                             ProductTypeId = 4
                         },
@@ -118,7 +121,7 @@ namespace Backend.SqlServerMigrations.Migrations
                             Id = 3,
                             Alias = "laptop-hp",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 4, 6, 40, 5, 632, DateTimeKind.Local).AddTicks(785),
+                            CreatedDate = new DateTime(2022, 4, 4, 13, 1, 17, 223, DateTimeKind.Local).AddTicks(3868),
                             Name = "Laptop HP",
                             ProductTypeId = 4
                         },
@@ -127,7 +130,7 @@ namespace Backend.SqlServerMigrations.Migrations
                             Id = 4,
                             Alias = "laptop-acer",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 4, 6, 40, 5, 632, DateTimeKind.Local).AddTicks(787),
+                            CreatedDate = new DateTime(2022, 4, 4, 13, 1, 17, 223, DateTimeKind.Local).AddTicks(3872),
                             Name = "Laptop Acer",
                             ProductTypeId = 4
                         },
@@ -136,7 +139,7 @@ namespace Backend.SqlServerMigrations.Migrations
                             Id = 5,
                             Alias = "laptop-asus",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 4, 6, 40, 5, 632, DateTimeKind.Local).AddTicks(789),
+                            CreatedDate = new DateTime(2022, 4, 4, 13, 1, 17, 223, DateTimeKind.Local).AddTicks(3874),
                             Name = "Laptop Asus",
                             ProductTypeId = 4
                         });
@@ -198,6 +201,30 @@ namespace Backend.SqlServerMigrations.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("Backend.Data.Entities.ProductPhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductPhoto");
                 });
 
             modelBuilder.Entity("Backend.Data.Entities.ProductType", b =>
@@ -284,7 +311,7 @@ namespace Backend.SqlServerMigrations.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "60b54e15-560b-4e6d-a830-a379fafd2802",
+                            ConcurrencyStamp = "c4594865-7367-4e70-bafa-eaae3cef51e1",
                             Description = "Quản trị viên",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -292,7 +319,7 @@ namespace Backend.SqlServerMigrations.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "4e417509-6cb0-4f36-9f96-4a16bd20d9e6",
+                            ConcurrencyStamp = "94ee7010-483e-4e3b-8704-633ff0e4e69f",
                             Description = "Người bán hàng",
                             Name = "Partner",
                             NormalizedName = "PARTNER"
@@ -300,7 +327,7 @@ namespace Backend.SqlServerMigrations.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "4a6a8256-a7d1-4f68-b9ad-2904d3faa07a",
+                            ConcurrencyStamp = "7be646d5-2f16-4dfc-846d-4451060492e8",
                             Description = "Người dùng đã đăng ký",
                             Name = "User",
                             NormalizedName = "USER"
@@ -432,7 +459,7 @@ namespace Backend.SqlServerMigrations.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "81c82aa4-ff54-422f-8159-fbabfde2de0e",
+                            ConcurrencyStamp = "e7f2fb4a-902c-41f9-b6d3-aa2af2ea2a1d",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hieutanmy321@gmail.com",
                             EmailConfirmed = false,
@@ -442,10 +469,10 @@ namespace Backend.SqlServerMigrations.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HIEUTANMY321@GMAIL.COM",
                             NormalizedUserName = "HIEUNGUYEN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIdX9t9XyZ1fPTqjv0SbA5jf/cyI3YUaOFd2+pbztzR9b3P+XbLWpJPHCRRoyuwbDQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENCukbM9EY59+Yybc0L2n8SFwyZkOfUTq4WXVcwvFH00Jo0FoLZ0ctdy7wzHz5Wi9w==",
                             PhoneNumber = "0965924083",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0604e233-d49a-4dc0-b917-49e596a57f70",
+                            SecurityStamp = "54cf6ea0-77c0-4b66-985e-25d03d3527b2",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "hieunguyen"
@@ -455,7 +482,7 @@ namespace Backend.SqlServerMigrations.Migrations
                             Id = 2,
                             AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "775d522d-4bf2-4837-8305-b4c2c7f2c38d",
+                            ConcurrencyStamp = "699c9811-a4ce-4414-8fde-3831792a54d6",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hieuvo@gmail.com",
                             EmailConfirmed = false,
@@ -465,9 +492,9 @@ namespace Backend.SqlServerMigrations.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HIEUVO@GMAIL.COM",
                             NormalizedUserName = "HIEUVO",
-                            PasswordHash = "AQAAAAEAACcQAAAAECpeqT4CIJqK/EFO0NHeFfZ3gezefFhkjR7T8EVYS2iwKNtyhyLWyH337Xd1m1k6mw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELld3Pqo4JW+bI81sbIju3lrm7WR/FI9sYXXoTwBDDdsqbWYwWWtGEpFr+H3zTfcww==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b6cba3bc-59fa-4ac4-afe5-7ade5c543935",
+                            SecurityStamp = "54b6a3af-2cd2-426f-bbc7-1f877d7d3d04",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "hieuvo"
@@ -477,7 +504,7 @@ namespace Backend.SqlServerMigrations.Migrations
                             Id = 3,
                             AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "f58ab1fb-e2ac-4aff-a6f0-5ea3229fd897",
+                            ConcurrencyStamp = "ecf7e61d-14ed-444a-a3e0-b844341d2aef",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "dat@gmail.com",
                             EmailConfirmed = false,
@@ -487,9 +514,9 @@ namespace Backend.SqlServerMigrations.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "DAT@GMAIL.COM",
                             NormalizedUserName = "DATLE",
-                            PasswordHash = "AQAAAAEAACcQAAAAELgCcpIU3vgKTPFXOYbcgijLYQXR/PS1R5PYLimVKMbvTlQpMoK4JC+MqkNs2pp3IA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFAUC2oftCEqhqacsiuwJjIPQDaS1PlOtuSBIxuHamwnT7JvgIBn/oy3HpIs/+7Nzg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c24d9ecd-1ae0-4f61-90a9-5d785bbc8d10",
+                            SecurityStamp = "1179811e-379a-43da-9a9d-fe59bf090106",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "datle"
@@ -621,6 +648,15 @@ namespace Backend.SqlServerMigrations.Migrations
                     b.HasOne("Backend.Data.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Data.Entities.ProductPhoto", b =>
+                {
+                    b.HasOne("Backend.Data.Entities.Product", "Product")
+                        .WithMany("ProductPhotos")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

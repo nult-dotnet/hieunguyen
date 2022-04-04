@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Backend.Data.EF;
 using Backend.Repository.Brand;
+using Backend.Repository.Product;
+using Backend.Repository.ProductPhoto;
 using Backend.Repository.User;
 
 namespace Backend.Repository.UnitOfWork
@@ -10,6 +12,8 @@ namespace Backend.Repository.UnitOfWork
         private readonly BackendDbContext _context;
         private IUserRepository _users;
         private IBrandRepository _brands;
+        private IProductRepository _products;
+        private IProductPhotoRepository _productPhotos;
 
         public UnitOfWork(BackendDbContext context)
         {
@@ -18,6 +22,8 @@ namespace Backend.Repository.UnitOfWork
 
         public IUserRepository Users => _users ??= new UserRepository(_context);
         public IBrandRepository Brands => _brands ??= new BrandRepository(_context);
+        public IProductRepository Products => _products ??= new ProductRepository(_context);
+        public IProductPhotoRepository ProductPhotos => _productPhotos ??= new ProductPhotoRepository(_context);
 
         public async Task<int> SaveChangesAsync()
         {

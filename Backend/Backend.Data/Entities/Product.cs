@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using Backend.Data.Enums;
 
 namespace Backend.Data.Entities
 {
     public class Product
     {
+        public Product()
+        {
+            ProductPhotos = new HashSet<ProductPhoto>();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
@@ -21,5 +27,6 @@ namespace Backend.Data.Entities
 
         public Category Category { get; set; }
         public Brand Brand { get; set; }
+        public ICollection<ProductPhoto> ProductPhotos { get; set; }
     }
 }

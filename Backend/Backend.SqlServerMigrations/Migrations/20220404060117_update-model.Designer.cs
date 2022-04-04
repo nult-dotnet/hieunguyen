@@ -4,49 +4,51 @@ using Backend.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Backend.PostgresSqlMigrations.Migrations
+namespace Backend.SqlServerMigrations.Migrations
 {
     [DbContext(typeof(BackendDbContext))]
-    partial class BackendDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220404060117_update-model")]
+    partial class updatemodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.7")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Backend.Data.Entities.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<double>("TotalRate")
-                        .HasColumnType("double precision");
+                        .HasColumnType("float");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -59,24 +61,25 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Alias")
                         .IsRequired()
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("Date");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -84,11 +87,11 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<int>("ProductTypeId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -102,7 +105,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 1,
                             Alias = "laptop-dell",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 4, 13, 0, 37, 534, DateTimeKind.Local).AddTicks(4042),
+                            CreatedDate = new DateTime(2022, 4, 4, 13, 1, 17, 222, DateTimeKind.Local).AddTicks(5430),
                             Name = "Laptop Dell",
                             ProductTypeId = 4
                         },
@@ -111,7 +114,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 2,
                             Alias = "laptop-macbook",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 4, 13, 0, 37, 535, DateTimeKind.Local).AddTicks(1100),
+                            CreatedDate = new DateTime(2022, 4, 4, 13, 1, 17, 223, DateTimeKind.Local).AddTicks(3778),
                             Name = "Laptop Macbook",
                             ProductTypeId = 4
                         },
@@ -120,7 +123,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 3,
                             Alias = "laptop-hp",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 4, 13, 0, 37, 535, DateTimeKind.Local).AddTicks(1167),
+                            CreatedDate = new DateTime(2022, 4, 4, 13, 1, 17, 223, DateTimeKind.Local).AddTicks(3868),
                             Name = "Laptop HP",
                             ProductTypeId = 4
                         },
@@ -129,7 +132,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 4,
                             Alias = "laptop-acer",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 4, 13, 0, 37, 535, DateTimeKind.Local).AddTicks(1170),
+                            CreatedDate = new DateTime(2022, 4, 4, 13, 1, 17, 223, DateTimeKind.Local).AddTicks(3872),
                             Name = "Laptop Acer",
                             ProductTypeId = 4
                         },
@@ -138,7 +141,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 5,
                             Alias = "laptop-asus",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 4, 13, 0, 37, 535, DateTimeKind.Local).AddTicks(1173),
+                            CreatedDate = new DateTime(2022, 4, 4, 13, 1, 17, 223, DateTimeKind.Local).AddTicks(3874),
                             Name = "Laptop Asus",
                             ProductTypeId = 4
                         });
@@ -148,49 +151,50 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Alias")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("BrandId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("Date");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Detail")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("GoodsReceipt")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("Inventory")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("Date");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(200)")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,0)");
 
                     b.Property<int>("Status")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -205,17 +209,18 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("IsDefault")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Url")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -228,16 +233,17 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<bool>("Status")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -280,23 +286,24 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(20)")
+                        .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -306,7 +313,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "6000a299-05fc-44d9-8c48-4616bf534396",
+                            ConcurrencyStamp = "c4594865-7367-4e70-bafa-eaae3cef51e1",
                             Description = "Quản trị viên",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -314,7 +321,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "a79b0f54-ba15-4edd-b3fb-a62c30a4baf5",
+                            ConcurrencyStamp = "94ee7010-483e-4e3b-8704-633ff0e4e69f",
                             Description = "Người bán hàng",
                             Name = "Partner",
                             NormalizedName = "PARTNER"
@@ -322,7 +329,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "25124888-51ac-48c5-a848-98258fc5b922",
+                            ConcurrencyStamp = "7be646d5-2f16-4dfc-846d-4451060492e8",
                             Description = "Người dùng đã đăng ký",
                             Name = "User",
                             NormalizedName = "USER"
@@ -333,17 +340,18 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RoleId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -356,27 +364,26 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:IdentityIncrement", 1)
                         .HasAnnotation("SqlServer:IdentitySeed", 4)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("Date");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<DateTime>("CreatedDate")
@@ -384,64 +391,64 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstMiddleName")
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<int>("Gender")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("Date");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("character varying(11)")
+                        .HasColumnType("nvarchar(11)")
                         .HasMaxLength(11);
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("character varying(100)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
@@ -454,7 +461,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "c2ebbe0d-9cec-4ed6-9a27-4b7cd7b7ed26",
+                            ConcurrencyStamp = "e7f2fb4a-902c-41f9-b6d3-aa2af2ea2a1d",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hieutanmy321@gmail.com",
                             EmailConfirmed = false,
@@ -464,10 +471,10 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HIEUTANMY321@GMAIL.COM",
                             NormalizedUserName = "HIEUNGUYEN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEE/PWJSDau0x8nmkZIkmbPvwIkzqQrBJv9p4ICnn9ljIGqYT8SYxAaqYWL1iYOz7RQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENCukbM9EY59+Yybc0L2n8SFwyZkOfUTq4WXVcwvFH00Jo0FoLZ0ctdy7wzHz5Wi9w==",
                             PhoneNumber = "0965924083",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e9a01f3a-6837-4bdc-982a-da9af3b556da",
+                            SecurityStamp = "54cf6ea0-77c0-4b66-985e-25d03d3527b2",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "hieunguyen"
@@ -477,7 +484,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 2,
                             AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "16d91899-8e37-4337-b091-c1c5051fef22",
+                            ConcurrencyStamp = "699c9811-a4ce-4414-8fde-3831792a54d6",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hieuvo@gmail.com",
                             EmailConfirmed = false,
@@ -487,9 +494,9 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HIEUVO@GMAIL.COM",
                             NormalizedUserName = "HIEUVO",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOUV4F05NqP36nzEUfKFnnC9UpQRyW8RO4BkM6iLRlxUGuI0B7JF2i/BmF/ZTvRyyw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELld3Pqo4JW+bI81sbIju3lrm7WR/FI9sYXXoTwBDDdsqbWYwWWtGEpFr+H3zTfcww==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1a161fc9-f548-42cf-8dc2-31d88d91605a",
+                            SecurityStamp = "54b6a3af-2cd2-426f-bbc7-1f877d7d3d04",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "hieuvo"
@@ -499,7 +506,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 3,
                             AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "23805506-d569-495e-a021-9ec01cb3f6e4",
+                            ConcurrencyStamp = "ecf7e61d-14ed-444a-a3e0-b844341d2aef",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "dat@gmail.com",
                             EmailConfirmed = false,
@@ -509,9 +516,9 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "DAT@GMAIL.COM",
                             NormalizedUserName = "DATLE",
-                            PasswordHash = "AQAAAAEAACcQAAAAEChF0hce0EX9bVQ7UtlhBN155O/eu2zEQcHroPziq3iP8XIedph6v/RILt/qJ5sYfA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFAUC2oftCEqhqacsiuwJjIPQDaS1PlOtuSBIxuHamwnT7JvgIBn/oy3HpIs/+7Nzg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6b6e19a4-f8e9-4552-99d8-0d2133c58ecd",
+                            SecurityStamp = "1179811e-379a-43da-9a9d-fe59bf090106",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "datle"
@@ -522,17 +529,18 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -544,16 +552,16 @@ namespace Backend.PostgresSqlMigrations.Migrations
             modelBuilder.Entity("Backend.Data.Entities.UserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -565,10 +573,10 @@ namespace Backend.PostgresSqlMigrations.Migrations
             modelBuilder.Entity("Backend.Data.Entities.UserRole", b =>
                 {
                     b.Property<int>("RoleId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("RoleId", "UserId");
 
@@ -597,16 +605,16 @@ namespace Backend.PostgresSqlMigrations.Migrations
             modelBuilder.Entity("Backend.Data.Entities.UserToken", b =>
                 {
                     b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 

@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Utilities", "Backen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Repository", "Backend.Repository\Backend.Repository.csproj", "{190E0558-CF09-4365-A612-7A6333EB4D61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.SqlServerMigrations", "Backend.SqlServerMigrations\Backend.SqlServerMigrations.csproj", "{862A5621-0B11-4F05-B1C2-CA6C59943148}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.SqlServerMigrations", "Backend.SqlServerMigrations\Backend.SqlServerMigrations.csproj", "{862A5621-0B11-4F05-B1C2-CA6C59943148}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.PostgresSqlMigrations", "Backend.PostgresSqlMigrations\Backend.PostgresSqlMigrations.csproj", "{7F516305-BA8E-4EA4-8B6F-75EC9BD7AE95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.PostgresSqlMigrations", "Backend.PostgresSqlMigrations\Backend.PostgresSqlMigrations.csproj", "{7F516305-BA8E-4EA4-8B6F-75EC9BD7AE95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Infrastructure", "Backend.Infrastructure\Backend.Infrastructure.csproj", "{4A842B9C-196F-43AC-BA09-835E7C3E6151}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{7F516305-BA8E-4EA4-8B6F-75EC9BD7AE95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F516305-BA8E-4EA4-8B6F-75EC9BD7AE95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F516305-BA8E-4EA4-8B6F-75EC9BD7AE95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A842B9C-196F-43AC-BA09-835E7C3E6151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A842B9C-196F-43AC-BA09-835E7C3E6151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A842B9C-196F-43AC-BA09-835E7C3E6151}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A842B9C-196F-43AC-BA09-835E7C3E6151}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
