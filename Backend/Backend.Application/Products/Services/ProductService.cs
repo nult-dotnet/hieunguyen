@@ -12,7 +12,6 @@ using Backend.Infrastructure.FileImage;
 using Backend.Repository.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Backend.Application.Products.Services
 {
@@ -37,6 +36,7 @@ namespace Backend.Application.Products.Services
 
             product.CreatedDate = DateTime.Now;
             product.Inventory = request.GoodsReceipt;
+            product.Alias = Slug.ToUrlSlug(request.Name);
 
             string path = _storageService.CreateProductPath(request.CategoryId, request.Name);
 
@@ -81,8 +81,7 @@ namespace Backend.Application.Products.Services
             _storageService.ChangeNameFolder(sPath, dPath);
 
             product.Map(update);
-
-            var currentUser = _httpContextAccessor.HttpContext.User.Identity.Name;
+            product.Alias = Slug.ToUrlSlug(update.Name);
 
             _unitOfWork.Products.Update(product);
 
@@ -144,6 +143,23 @@ namespace Backend.Application.Products.Services
             }
 
             return await Task.FromResult(new ApiSuccessResult<List<Product>>(products));
+        }
+
+        public async Task<ApiResult<List<Product>>> GetProductByBrandAsync(int id)
+        {
+            var listProduct = await _unitOfWork.Products
+                .FindByCondition(x => x.BrandId == id)
+                .Include(x=>x.ProductPhotos)
+                .ToListAsync();
+
+            if (listProduct is null || listProduct.Count == 0)
+            {
+                return await Task.FromResult(new ApiErrorResult<List<Product>>("Không tìm thấy sản phẩm"));
+            }
+
+            var result = await CreatePathPhotos(listProduct);
+
+            return await Task.FromResult(new ApiSuccessResult<List<Product>>(result));
         }
 
         public async Task<ApiResult<string>> DisableAsync(int productId)

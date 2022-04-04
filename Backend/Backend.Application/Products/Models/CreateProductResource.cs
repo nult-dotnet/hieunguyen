@@ -28,9 +28,6 @@ namespace Backend.Application.Products.Models
         public int CategoryId { get; set; }
 
         [Required]
-        public string Alias { get; set; }
-
-        [Required]
         public int BrandId { get; set; }
 
         [Required]

@@ -30,8 +30,5 @@ namespace Backend.Application.Products.Models
 
         [Required]
         public int CategoryId { get; set; }
-
-        [Required]
-        public string Alias { get; set; }
     }
 }
