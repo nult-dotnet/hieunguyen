@@ -21,6 +21,11 @@ export interface UpdateBrandAction {
   brand: Brand;
 }
 
+export interface PatchBrandAction {
+  type: typeof types.PATCH_BRAND;
+  brand: Brand;
+}
+
 export interface DeleteBrandAction {
   type: typeof types.DELETE_BRAND;
   id: number;
@@ -31,6 +36,7 @@ export type BrandActionTypes =
   | GetBrandByIdAction
   | AddBrandAction
   | UpdateBrandAction
+  | PatchBrandAction
   | DeleteBrandAction;
 
 export type AppActions = BrandActionTypes;

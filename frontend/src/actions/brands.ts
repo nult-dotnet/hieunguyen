@@ -3,7 +3,14 @@ import { AppActions } from "./../types/brand/actions";
 import { Brand } from "../types/brand/Brand";
 import * as types from "../types/brand/types";
 import { Dispatch } from "redux";
-import { add, deleteApi, getAll, getById, update } from "../services/brandApi";
+import {
+  add,
+  deleteApi,
+  getAll,
+  getById,
+  update,
+  updatePatch,
+} from "../services/brandApi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -24,6 +31,11 @@ export const addBrand = (brand: Brand): AppActions => ({
 
 export const updateBrand = (brand: Brand): AppActions => ({
   type: types.UPDATE_BRAND,
+  brand,
+});
+
+export const patchBrand = (brand: Brand): AppActions => ({
+  type: types.PATCH_BRAND,
   brand,
 });
 
@@ -130,6 +142,41 @@ export const startUpdateBrand =
           progress: undefined,
         });
         dispatch(updateBrand(res.resultObj));
+      } else {
+        toast.warn(res.message, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export const startPatchBrand =
+  (id: number, data: any) =>
+  async (dispatch: Dispatch<AppActions>, getState: () => AppState) => {
+    try {
+      const res = await updatePatch(id, data);
+
+      debugger;
+
+      if (res.isSuccessed) {
+        toast.info("Cập nhật thương hiệu thành công", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        dispatch(patchBrand(res.resultObj));
       } else {
         toast.warn(res.message, {
           position: "top-right",

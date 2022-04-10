@@ -5,11 +5,18 @@ import { AppActions } from "../../types/brand/actions";
 import { Brand } from "../../types/brand/Brand";
 import { withRouter, WithRouterProps } from "../../withRouter";
 import { connect } from "react-redux";
-import { startGetBrandById, startUpdateBrand } from "../../actions/brands";
-import { Box, Button, TextField } from "@mui/material";
+import {
+  startGetBrandById,
+  startPatchBrand,
+  startUpdateBrand,
+} from "../../actions/brands";
+import { Button, TextField } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-import { validatePhoneNumber, validateString } from "../../services/validateForm";
+import {
+  validatePhoneNumber,
+  validateString,
+} from "../../services/validateForm";
 
 type Props = LinkStateProps & LinkDispatchProps & WithRouterProps<Params>;
 
@@ -24,6 +31,11 @@ interface UpdateBrandState {
   addressValid: string;
   phoneValid: string;
   nameValid: string;
+  nameChange: boolean;
+  addressChange: boolean;
+  descriptionChange: boolean;
+  phoneNumberChange: boolean;
+  statusChange: boolean;
 }
 
 interface Params {
@@ -44,6 +56,11 @@ class EditBrandComponent extends Component<Props, UpdateBrandState> {
       addressValid: "",
       phoneValid: "",
       nameValid: "",
+      nameChange: false,
+      addressChange: false,
+      descriptionChange: false,
+      phoneNumberChange: false,
+      statusChange: false,
     };
   }
 
@@ -79,32 +96,43 @@ class EditBrandComponent extends Component<Props, UpdateBrandState> {
     this.setState(model);
 
     if (name === "name") {
-      this.setState({ nameValid: validateString(value) });
+      this.setState({ nameValid: validateString(value), nameChange: true });
     } else if (name === "address") {
-      this.setState({ addressValid: validateString(value) });
+      this.setState({
+        addressValid: validateString(value),
+        addressChange: true,
+      });
     } else if (name === "phoneNumber") {
-      this.setState({ phoneValid: validatePhoneNumber(value) });
+      this.setState({
+        phoneValid: validatePhoneNumber(value),
+        phoneNumberChange: true,
+      });
+    } else if (name === "description") {
+      this.setState({ descriptionChange: true });
+    } else if (name === "status") {
+      this.setState({ statusChange: true });
     }
   };
 
   onHandleSubmit = (event: any) => {
     event.preventDefault();
+    const {
+      name,
+      address,
+      description,
+      phoneNumber,
+      status,
+      addressValid,
+      phoneValid,
+      nameValid,
+      userId,
+    } = this.state;
 
-    const name = this.state.name;
-    const address = this.state.address;
-    const description = this.state.description;
-    const phoneNumber = this.state.phoneNumber;
-    const status = this.state.status;
-    const userId = this.state.userId;
-    const addressValid = this.state.addressValid;
-    const phoneValid = this.state.phoneValid;
-    const nameValid = this.state.nameValid;
     const id = this.props.match.params.id;
     if (
-      name != "" &&
-      address != "" &&
-      phoneNumber != "" &&
-      userId != "" &&
+      name !== "" &&
+      address !== "" &&
+      phoneNumber !== "" &&
       nameValid === "" &&
       addressValid === "" &&
       phoneValid === ""
@@ -132,17 +160,110 @@ class EditBrandComponent extends Component<Props, UpdateBrandState> {
     }
   };
 
+  onHandleSubmitPatch = async (event: any) => {
+    event.preventDefault();
+
+    const {
+      name,
+      address,
+      description,
+      phoneNumber,
+      status,
+      addressValid,
+      phoneValid,
+      nameValid,
+      nameChange,
+      addressChange,
+      descriptionChange,
+      phoneNumberChange,
+      statusChange,
+    } = this.state;
+    const id = this.props.match.params.id;
+    const patch = [];
+
+    if (nameChange === true) {
+      patch.push({
+        op: "replace",
+        path: "name",
+        value: name,
+      });
+    }
+
+    if (addressChange === true) {
+      patch.push({
+        op: "replace",
+        path: "address",
+        value: address,
+      });
+    }
+
+    if (descriptionChange === true) {
+      patch.push({
+        op: "replace",
+        path: "description",
+        value: description,
+      });
+    }
+
+    if (phoneNumberChange === true) {
+      patch.push({
+        op: "replace",
+        path: "phoneNumber",
+        value: phoneNumber,
+      });
+    }
+
+    if (statusChange === true) {
+      patch.push({
+        op: "replace",
+        path: status,
+        value: status,
+      });
+    }
+
+    if (
+      name !== "" &&
+      address !== "" &&
+      phoneNumber !== "" &&
+      nameValid === "" &&
+      addressValid === "" &&
+      phoneValid === ""
+    ) {
+      await this.props.startPatchBrand(parseInt(id), patch);
+      this.setState({
+        nameChange: false,
+        addressChange: false,
+        descriptionChange: false,
+        phoneNumberChange: false,
+        statusChange: false,
+      });
+    } else {
+      toast.warn("Hãy nhập dữ liệu hợp lệ", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
+
   render() {
-    const name = this.state.name;
-    const address = this.state.address;
-    const description = this.state.description;
-    const phoneNumber = this.state.phoneNumber;
-    const status = this.state.status;
-    const userId = this.state.userId;
-    const totalRate = this.state.totalRate;
-    const addressValid = this.state.addressValid;
-    const phoneValid = this.state.phoneValid;
-    const nameValid = this.state.nameValid;
+    const {
+      name,
+      address,
+      description,
+      phoneNumber,
+      status,
+      userId,
+      totalRate,
+      addressValid,
+      phoneValid,
+      nameValid,
+    } = this.state;
+
     return (
       <React.Fragment>
         <h2
@@ -289,8 +410,25 @@ class EditBrandComponent extends Component<Props, UpdateBrandState> {
               style={{
                 display: "inline-flex",
                 position: "absolute",
-                right: 0,
+                right: "30%",
+                left: "40%",
                 width: "150px",
+              }}
+              type="button"
+              variant="contained"
+              aria-label="contained primary button group"
+              color="primary"
+              onClick={this.onHandleSubmitPatch}
+            >
+              Submit Patch
+            </Button>
+            <Button
+              sx={{ marginTop: 1 }}
+              style={{
+                display: "inline-flex",
+                position: "absolute",
+                width: "150px",
+                right: 0,
               }}
               type="submit"
               variant="contained"
@@ -313,6 +451,7 @@ interface LinkStateProps {
 interface LinkDispatchProps {
   startUpdateBrand: (brand: Brand) => void;
   startGetBrandById: (id: number) => void;
+  startPatchBrand: (id: number, data: any) => void;
 }
 
 const mapStateToProps = (state: AppState): LinkStateProps => ({
@@ -324,6 +463,7 @@ const mapDispatchToProps = (
 ): LinkDispatchProps => ({
   startUpdateBrand: bindActionCreators(startUpdateBrand, dispatch),
   startGetBrandById: bindActionCreators(startGetBrandById, dispatch),
+  startPatchBrand: bindActionCreators(startPatchBrand, dispatch),
 });
 
 export default connect(

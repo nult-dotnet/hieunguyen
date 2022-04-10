@@ -46,7 +46,18 @@ const update = async (
 ) => {
   try {
     const res = await axios.put(`${apiURL}/brands/update/${id}`, brand, {
-      headers
+      headers,
+    });
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const updatePatch = async (id: number, data: any) => {
+  try {
+    const res = await axios.patch(`${apiURL}/brands/update/${id}`, data, {
+      headers,
     });
     return res.data;
   } catch (error) {
@@ -59,11 +70,11 @@ const deleteApi = async (id: number) => {
     const res = await axios.delete(`${apiURL}/brands/delete/${id}`, {
       headers,
     });
-    debugger
+    debugger;
     return res.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export { getAll, getById, add, update, deleteApi };
+export { getAll, getById, add, update, deleteApi, updatePatch };

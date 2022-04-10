@@ -9,7 +9,10 @@ import { Brand } from "../../types/brand/Brand";
 import "react-toastify/dist/ReactToastify.css";
 import { Box, Button, TextField } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify";
-import { validatePhoneNumber, validateString } from "../../services/validateForm";
+import {
+  validatePhoneNumber,
+  validateString,
+} from "../../services/validateForm";
 type Props = LinkStateProps & LinkDispatchProps;
 
 interface AddBrandState {
@@ -38,8 +41,8 @@ class AddBrandComponent extends Component<Props, AddBrandState> {
     };
   }
 
-  onAdd = (data: Brand) => {
-    this.props.startAddBrand(data);
+  onAdd = async (data: Brand) => {
+    await this.props.startAddBrand(data);
   };
 
   onHandleChange = (event: any) => {
@@ -63,20 +66,22 @@ class AddBrandComponent extends Component<Props, AddBrandState> {
   onHandleSubmit = (event: any) => {
     event.preventDefault();
 
-    const name = this.state.name;
-    const address = this.state.address;
-    const description = this.state.description;
-    const phoneNumber = this.state.phoneNumber;
-    const userId = this.state.userId;
-    const nameValid = this.state.nameValid;
-    const addressValid = this.state.addressValid;
-    const phoneValid = this.state.phoneValid;
+    const {
+      name,
+      address,
+      description,
+      phoneNumber,
+      addressValid,
+      phoneValid,
+      nameValid,
+      userId,
+    } = this.state;
 
     if (
-      name != "" &&
-      address != "" &&
-      phoneNumber != "" &&
-      userId != "" &&
+      name !== "" &&
+      address !== "" &&
+      phoneNumber !== "" &&
+      userId !== "" &&
       nameValid === "" &&
       addressValid === "" &&
       phoneValid === ""
@@ -105,14 +110,16 @@ class AddBrandComponent extends Component<Props, AddBrandState> {
   };
 
   render() {
-    const name = this.state.name;
-    const address = this.state.address;
-    const description = this.state.description;
-    const phoneNumber = this.state.phoneNumber;
-    const userId = this.state.userId;
-    const nameValid = this.state.nameValid;
-    const addressValid = this.state.addressValid;
-    const phoneValid = this.state.phoneValid;
+    const {
+      name,
+      address,
+      description,
+      phoneNumber,
+      addressValid,
+      phoneValid,
+      nameValid,
+      userId,
+    } = this.state;
 
     return (
       <React.Fragment>
