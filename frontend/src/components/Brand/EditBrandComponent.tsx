@@ -442,7 +442,7 @@ class EditBrandComponent extends Component<Props, UpdateBrandState> {
               aria-label="contained primary button group"
               color="primary"
             >
-              Submit
+              Submit put
             </Button>
           </div>
         </form>
