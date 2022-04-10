@@ -223,7 +223,7 @@ class EditBrandComponent extends Component<Props, UpdateBrandState> {
     if (statusChange === true) {
       patch.push({
         op: "replace",
-        path: status,
+        path: "status",
         value: status,
       });
     }
