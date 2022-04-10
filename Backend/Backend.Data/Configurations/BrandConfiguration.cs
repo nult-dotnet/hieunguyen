@@ -23,6 +23,10 @@ namespace Backend.Data.Configurations
             builder.Property(x => x.TotalRate)
                 .IsRequired();
 
+            builder.Property(x => x.PhoneNumber)
+                .HasMaxLength(11)
+                .IsRequired();
+
             builder.HasOne(x => x.User)
                 .WithMany(x => x.Brands)
                 .HasForeignKey(x => x.UserId)

@@ -12,7 +12,9 @@ namespace Backend.Application.Brands.Services
         Task<ApiResult<List<Brand>>> GetAllAsync();
         Task<ApiResult<Brand>> GetByIdAsync(int id);
         Task<ApiResult<Brand>> GetByOwnerUser();
-        Task<ApiResult<string>> CreateAsync(CreateBrandResource resource);
+        Task<ApiResult<Brand>> CreateAsync(CreateBrandResource resource);
         Task<ApiResult<string>> UpdatePatchAsync(int id, JsonPatchDocument patchDocument);
+        Task<ApiResult<Brand>> UpdateAsync(int id, UpdateBrandResource resource);
+        Task<ApiResult<string>> DeleteAsync(int id);
     }
 }

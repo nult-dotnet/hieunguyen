@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Backend.Application.Brands.Commands.CreateBrand;
+using Backend.Application.Brands.Commands.DeleteBrand;
+using Backend.Application.Brands.Commands.UpdateBrand;
 using Backend.Application.Brands.Commands.UpdateBrandPatch;
 using Backend.Application.Brands.Models;
 using Backend.Application.Brands.Queries.GetAllBrand;
@@ -17,6 +19,7 @@ namespace Backend.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BrandsController : BaseController
     {
         private readonly IMediator _mediator;
@@ -28,7 +31,7 @@ namespace Backend.WebApi.Controllers
 
         [HttpPost("create")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        [Authorize]
+        [AuthorizeRoles(Constants.ADMIN, Constants.USER)]
         public async Task<IActionResult> Create([FromBody] CreateBrandResource request)
         {
             var model = new CreateBrandCommand(request);
@@ -36,15 +39,24 @@ namespace Backend.WebApi.Controllers
         }
 
         [HttpPatch("update/{id}")]
-        [AuthorizeRoles(Constants.PARTNER, Constants.USER)]
+        [AuthorizeRoles(Constants.ADMIN, Constants.PARTNER)]
         public async Task<IActionResult> UpdatePatch(int id, JsonPatchDocument request)
         {
             var model = new UpdateBrandPatchCommand(id, request);
             return Ok(await _mediator.Send(model));
         }
 
+        [HttpPut("update/{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [AuthorizeRoles(Constants.ADMIN, Constants.PARTNER)]
+        public async Task<IActionResult> Update(int id, UpdateBrandResource request)
+        {
+            var model = new UpdateBrandComand(id, request);
+            return Ok(await _mediator.Send(model));
+        }
+
         [HttpGet("get-all")]
-        [Authorize(Constants.ADMIN)]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var model = new GetAllBrandQuery();
@@ -60,10 +72,18 @@ namespace Backend.WebApi.Controllers
         }
 
         [HttpGet("get-by-owner")]
-        [Authorize]
+        [AuthorizeRoles(Constants.PARTNER, Constants.USER)]
         public async Task<IActionResult> GetByOwner()
         {
             var model = new GetBrandByOwnerUserQuery();
+            return Ok(await _mediator.Send(model));
+        }
+
+        [HttpDelete("delete/{id}")]
+        [AuthorizeRoles(Constants.ADMIN)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var model = new DeleteBrandCommand(id);
             return Ok(await _mediator.Send(model));
         }
     }

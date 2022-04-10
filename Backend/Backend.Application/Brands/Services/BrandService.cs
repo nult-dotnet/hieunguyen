@@ -1,16 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using Backend.Application.Brands.Extensions;
 using Backend.Application.Brands.Models;
 using Backend.Application.Common.Models;
 using Backend.Data.Entities;
+using Backend.Data.Enums;
 using Backend.Repository.UnitOfWork;
 using Backend.Utilities.SystemConstants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Application.Brands.Services
 {
@@ -30,7 +34,9 @@ namespace Backend.Application.Brands.Services
 
         public async Task<ApiResult<List<Brand>>> GetAllAsync()
         {
-            var listBrand = await _unitOfWork.Brands.FindAllAsync();
+            var listBrand = await _unitOfWork.Brands
+                .FindByCondition(x => x.Status != (int)BrandStatus.STOP)
+                .ToListAsync();
 
             return await Task.FromResult(new ApiSuccessResult<List<Brand>>(listBrand));
         }
@@ -52,31 +58,42 @@ namespace Backend.Application.Brands.Services
             return await Task.FromResult(new ApiSuccessResult<Brand>(brand));
         }
 
-        public async Task<ApiResult<string>> CreateAsync(CreateBrandResource resource)
+        public async Task<ApiResult<Brand>> CreateAsync(CreateBrandResource resource)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var currentBrand = _unitOfWork.Brands.FindByCondition(x => x.Name == resource.Name).FirstOrDefault();
+            var currentBrand = _unitOfWork.Brands.FindByCondition(x => x.Name == resource.Name && x.Status!=(int) BrandStatus.STOP).FirstOrDefault();
+
+            var isAdmin = _httpContextAccessor.HttpContext.User.IsInRole(Constants.ADMIN);
+            var isPartner = _httpContextAccessor.HttpContext.User.IsInRole(Constants.PARTNER);
 
             if (currentBrand != null)
             {
-                return await Task.FromResult(new ApiErrorResult<string>("Thương hiệu đã tồn tại"));
+                return await Task.FromResult(new ApiErrorResult<Brand>("Thương hiệu đã tồn tại"));
             }
 
             var brand = _mapper.Map<Brand>(resource);
-            brand.UserId = int.Parse(userId);
+            brand.Status = (int)BrandStatus.OPEN;
+
+            if (!isAdmin)
+            {
+                brand.UserId = int.Parse(userId);
+                var user = await _userManager.FindByIdAsync(userId);
+                if (!isPartner)
+                {
+                    var result = await _userManager.AddToRoleAsync(user, Constants.PARTNER_ROLE_NAME);
+
+                    if (!result.Succeeded)
+                        return await Task.FromResult(new ApiErrorResult<Brand>("Không thể thêm thương hiệu"));
+                }
+            }
+
             brand.TotalRate = 0;
-
-            var user = await _userManager.FindByIdAsync(userId);
-            var result = await _userManager.AddToRoleAsync(user, Constants.PARTNER_ROLE_NAME);
-
-            if (!result.Succeeded)
-                return await Task.FromResult(new ApiErrorResult<string>("Không thể thêm thương hiệu"));
 
             await _unitOfWork.Brands.CreateAsync(brand);
             await _unitOfWork.SaveChangesAsync();
 
-            return await Task.FromResult(new ApiSuccessResult<string>("Thêm thương hiệu thành công"));
+            return await Task.FromResult(new ApiSuccessResult<Brand>(brand));
 
         }
 
@@ -84,25 +101,44 @@ namespace Backend.Application.Brands.Services
         {
             var brand = await _unitOfWork.Brands.FindByIdAsync(id);
 
-            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            if (brand.UserId != int.Parse(userId))
+            try
             {
-                return await Task.FromResult(new ApiErrorResult<string>("Bạn không có quyền cập nhật"));
+                patchDocument.ApplyTo(brand);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return await Task.FromResult(new ApiErrorResult<string>(e.Message));
             }
 
-            patchDocument.ApplyTo(brand);
-
-            //var currentBrand = _unitOfWork.Brands.FindByCondition(x => x.Name == brand.Name).FirstOrDefault();
-
-            //if (currentBrand != null)
-            //{
-            //    return await Task.FromResult(new ApiSuccessResult<string>("Tên thương hiệu đã tồn tại"));
-            //}
-
-            await _unitOfWork.SaveChangesAsync();
-
             return await Task.FromResult(new ApiSuccessResult<string>("Cập nhật thương hiệu thành công"));
+        }
+
+        public async Task<ApiResult<Brand>> UpdateAsync(int id, UpdateBrandResource resource)
+        {
+            var brand = await _unitOfWork.Brands.FindByIdAsync(id);
+            brand.Map(resource);
+
+            try
+            {
+                _unitOfWork.Brands.Update(brand);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return await Task.FromResult(new ApiErrorResult<Brand>(e.Message));
+            }
+
+            return await Task.FromResult(new ApiSuccessResult<Brand>(brand));
+        }
+
+        public async Task<ApiResult<string>> DeleteAsync(int id)
+        {
+            var brand = await _unitOfWork.Brands.FindByIdAsync(id);
+            brand.Status = (int)BrandStatus.STOP;
+            _unitOfWork.Brands.Update(brand);
+            await _unitOfWork.SaveChangesAsync();
+            return await Task.FromResult(new ApiSuccessResult<string>("Xóa thương hiệu thành công."));
         }
     }
 }

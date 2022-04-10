@@ -40,6 +40,17 @@ namespace Backend.WebApi
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.WithOrigins("http://localhost:3000/")
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
+                    .WithExposedHeaders("x-custom-header")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .SetIsOriginAllowed((host) => true);
+            }));
+
             // Model state validation filter ASP.NET Core
             services.AddScoped<ValidationFilterAttribute>();
 

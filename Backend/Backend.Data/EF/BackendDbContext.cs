@@ -32,6 +32,7 @@ namespace Backend.Data.EF
             modelBuilder.ApplyConfiguration(new UserClaimConfiguration());
             modelBuilder.ApplyConfiguration(new UserLoginConfiguration());
             modelBuilder.ApplyConfiguration(new UserTokenConfiguration());
+            modelBuilder.ApplyConfiguration(new BrandConfiguration());
 
             modelBuilder.Seed();
         }
@@ -39,5 +40,7 @@ namespace Backend.Data.EF
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductType> ProductTypes { get; set; }
+        public virtual DbSet<Brand> Brands { get; set; }
+        public virtual DbSet<ProductPhoto> ProductPhotos { get; set; }
     }
 }

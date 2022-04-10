@@ -4,15 +4,17 @@ using Backend.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Backend.PostgresSqlMigrations.Migrations
 {
     [DbContext(typeof(BackendDbContext))]
-    partial class BackendDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220408050425_update-brand-model")]
+    partial class updatebrandmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,6 +55,9 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -106,7 +111,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 1,
                             Alias = "laptop-dell",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 8, 12, 47, 37, 780, DateTimeKind.Local).AddTicks(8723),
+                            CreatedDate = new DateTime(2022, 4, 8, 12, 4, 25, 230, DateTimeKind.Local).AddTicks(5312),
                             Name = "Laptop Dell",
                             ProductTypeId = 4
                         },
@@ -115,7 +120,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 2,
                             Alias = "laptop-macbook",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 8, 12, 47, 37, 781, DateTimeKind.Local).AddTicks(5866),
+                            CreatedDate = new DateTime(2022, 4, 8, 12, 4, 25, 231, DateTimeKind.Local).AddTicks(4290),
                             Name = "Laptop Macbook",
                             ProductTypeId = 4
                         },
@@ -124,7 +129,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 3,
                             Alias = "laptop-hp",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 8, 12, 47, 37, 781, DateTimeKind.Local).AddTicks(5934),
+                            CreatedDate = new DateTime(2022, 4, 8, 12, 4, 25, 231, DateTimeKind.Local).AddTicks(4388),
                             Name = "Laptop HP",
                             ProductTypeId = 4
                         },
@@ -133,7 +138,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 4,
                             Alias = "laptop-acer",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 8, 12, 47, 37, 781, DateTimeKind.Local).AddTicks(5937),
+                            CreatedDate = new DateTime(2022, 4, 8, 12, 4, 25, 231, DateTimeKind.Local).AddTicks(4392),
                             Name = "Laptop Acer",
                             ProductTypeId = 4
                         },
@@ -142,7 +147,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 5,
                             Alias = "laptop-asus",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 8, 12, 47, 37, 781, DateTimeKind.Local).AddTicks(5938),
+                            CreatedDate = new DateTime(2022, 4, 8, 12, 4, 25, 231, DateTimeKind.Local).AddTicks(4426),
                             Name = "Laptop Asus",
                             ProductTypeId = 4
                         });
@@ -310,7 +315,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "bc5f4ee9-5bd9-4c45-a0e5-388934fb652e",
+                            ConcurrencyStamp = "2489eba4-de4f-41f7-8bdf-325c4284d0c5",
                             Description = "Quản trị viên",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -318,7 +323,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "ba6a9d53-3e3e-4da7-966b-3684ef795168",
+                            ConcurrencyStamp = "47134eca-ad2b-4159-8ec7-d5eceee39aef",
                             Description = "Người bán hàng",
                             Name = "Partner",
                             NormalizedName = "PARTNER"
@@ -326,7 +331,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "156b889f-849f-4fd0-b900-5ec21ea088e3",
+                            ConcurrencyStamp = "0c818811-a900-4e68-8ca9-0fb1d3a53da5",
                             Description = "Người dùng đã đăng ký",
                             Name = "User",
                             NormalizedName = "USER"
@@ -458,7 +463,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "c47e5ac7-41f7-4848-892a-cd8885b18ce3",
+                            ConcurrencyStamp = "5f9eeed7-e956-485c-b9e9-da303bb66491",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hieutanmy321@gmail.com",
                             EmailConfirmed = false,
@@ -468,10 +473,10 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HIEUTANMY321@GMAIL.COM",
                             NormalizedUserName = "HIEUNGUYEN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBhhYWJGK+SlHarYKHu/p9Pj4XRFoFJ90m4uhxEptxOypweOIniKnKy2iGhVKU5qhQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKzlzdavqt373T7aTRXJd2/soNOtGQMrrna3i1F5GTtMg9spgXtGM9lhSQv0ZHekcw==",
                             PhoneNumber = "0965924083",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6205a867-eacd-4ddb-959c-d2a3250d631f",
+                            SecurityStamp = "ee51ba9c-2bd7-4375-9e4e-19339fc91e31",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "hieunguyen"
@@ -481,7 +486,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 2,
                             AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "c0fba7a3-b96c-4a2d-ac03-ff1f68f7cee4",
+                            ConcurrencyStamp = "7b8629bf-12a3-40e5-ac35-24a9cf9d200d",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hieuvo@gmail.com",
                             EmailConfirmed = false,
@@ -491,9 +496,9 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HIEUVO@GMAIL.COM",
                             NormalizedUserName = "HIEUVO",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPIMWxJZvSesvJgWfXX400x5HHFA5JGVk9OfqL32iYV4FM4VpR2UGPho9m5nYZwCpQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDGaZZj/9+TQZhNOiHyra6rLapoOrBMTo4DUqbvdtu74NwWmamWF4nbei59FMgGTuA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "51fbd962-976f-4a22-968a-4d63ed390de3",
+                            SecurityStamp = "4405b88e-f1f3-4ab5-a321-e5b0779d2055",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "hieuvo"
@@ -503,7 +508,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 3,
                             AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "4fff5a1b-df67-4e24-9d9d-f2ae476a8cea",
+                            ConcurrencyStamp = "eae458e2-2bad-49cb-b04f-88966ab4b10b",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "dat@gmail.com",
                             EmailConfirmed = false,
@@ -513,9 +518,9 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "DAT@GMAIL.COM",
                             NormalizedUserName = "DATLE",
-                            PasswordHash = "AQAAAAEAACcQAAAAEL/0dtfJ+2IjywTyp2EuVbYIdKfZP7PsuinWjDFUV+i9ytSa/Nq0gxufzJFWpqgNuw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENDUicEeCTYKsT4DE1kXzNKTSehFmfcelOUwTwYX1cXtmhbVD3Q4uRDRJAvEzVzNqg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0b645712-030e-4673-89e9-6bbbf63a801b",
+                            SecurityStamp = "6c9506c5-2a9f-43e7-b472-107c24f41f66",
                             Status = 0,
                             TwoFactorEnabled = false,
                             UserName = "datle"
