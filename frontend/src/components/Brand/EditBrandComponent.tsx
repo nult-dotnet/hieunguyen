@@ -147,6 +147,13 @@ class EditBrandComponent extends Component<Props, UpdateBrandState> {
         phoneNumber: phoneNumber,
         userId: parseInt(userId),
       });
+      this.setState({
+        nameChange: false,
+        addressChange: false,
+        descriptionChange: false,
+        phoneNumberChange: false,
+        statusChange: false,
+      });
     } else {
       toast.warn("Hãy nhập dữ liệu hợp lệ", {
         position: "top-right",
@@ -160,7 +167,7 @@ class EditBrandComponent extends Component<Props, UpdateBrandState> {
     }
   };
 
-  onHandleSubmitPatch = async (event: any) => {
+  onHandleSubmitPatch = (event: any) => {
     event.preventDefault();
 
     const {
@@ -229,7 +236,7 @@ class EditBrandComponent extends Component<Props, UpdateBrandState> {
       addressValid === "" &&
       phoneValid === ""
     ) {
-      await this.props.startPatchBrand(parseInt(id), patch);
+      this.props.startPatchBrand(parseInt(id), patch);
       this.setState({
         nameChange: false,
         addressChange: false,
