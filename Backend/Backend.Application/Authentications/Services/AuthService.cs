@@ -10,9 +10,9 @@ using Backend.Application.Common.Models;
 using Backend.Data.Entities;
 using Backend.Data.Enums;
 using Backend.Repository.UnitOfWork;
-using Backend.Utilities.SystemConstants;
+using Backend.Utilities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -20,27 +20,22 @@ namespace Backend.Application.Authentications.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _config;
-        private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AuthService(UserManager<User> userManager, SignInManager<User> signInManager,
-            IConfiguration config, IHttpContextAccessor httpContextAccessor, IMapper mapper, IUnitOfWork unitOfWork)
+        public AuthService(IConfiguration config, IHttpContextAccessor httpContextAccessor, IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
             _config = config;
             _httpContextAccessor = httpContextAccessor;
-            _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
 
         public async Task<ApiResult<string>> AuthenticateAsync(AuthenticateResource request)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _unitOfWork.Users
+                .FindByCondition(x=>x.Email == request.Email)
+                .SingleOrDefaultAsync();
 
             if (user is null || user.Status.Equals(UserStatus.DELETED))
             {
@@ -52,24 +47,53 @@ namespace Backend.Application.Authentications.Services
                 return new ApiErrorResult<string>("Tài khoản đã bị khóa");
             }
 
-            if (user.PasswordHash is null)
+            var result = await _unitOfWork.Users
+                .FindByCondition(x =>
+                    x.Email == request.Email && x.PasswordHash == Encryptor.SHA256Hash(request.Password))
+                .SingleOrDefaultAsync();
+
+            if (result is null)
             {
-                return new ApiErrorResult<string>("Đăng nhập thất bại, sai phương thức đăng nhập.");
+                return await Task.FromResult(new ApiSuccessResult<string>("Đăng nhập thất bại"));
             }
 
-            var result = await _signInManager.PasswordSignInAsync(user.UserName,
-                request.Password, request.RememberMe, true);
+            var userRoles = await _unitOfWork.UserRoles
+                .FindByCondition(x => x.UserId == user.Id)
+                .ToListAsync();
 
-            if (!result.Succeeded)
+            var roles = new List<string>();
+
+            foreach (var r in userRoles)
             {
-                return new ApiErrorResult<string>("Đăng nhập thất bại");
+                switch (r.RoleId)
+                {
+                    case 1: roles.Add("Admin");
+                        break;
+                    case 2: roles.Add("Partner");
+                        break;
+                    default: roles.Add("User");
+                        break;
+                }
             }
-
-            var roles = await _userManager.GetRolesAsync(user);
 
             var token = CreateToken(roles, user);
 
             return await Task.FromResult(new ApiSuccessResult<string>(token));
+        }
+
+        public Task<bool> SignOutAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResult<string>> ForgotPasswordAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResult<string>> ResetPasswordAsync(ResetPasswordResource request)
+        {
+            throw new NotImplementedException();
         }
 
         private string CreateToken(IEnumerable<string> roles, User user)
@@ -96,44 +120,37 @@ namespace Backend.Application.Authentications.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<bool> SignOutAsync()
-        {
-            await _signInManager.SignOutAsync();
-            _httpContextAccessor.HttpContext.Session.Remove(Constants.CURRENT_USER);
-            return true;
-        }
+        //public async Task<ApiResult<string>> ForgotPasswordAsync(string email)
+        //{
+        //    var user = await _userManager.FindByEmailAsync(email);
 
-        public async Task<ApiResult<string>> ForgotPasswordAsync(string email)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
+        //    if (user is null)
+        //    {
+        //        return await Task.FromResult(new ApiErrorResult<string>("Tài khoản không tồn tại"));
+        //    }
 
-            if (user is null)
-            {
-                return await Task.FromResult(new ApiErrorResult<string>("Tài khoản không tồn tại"));
-            }
+        //    string token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        //    return await Task.FromResult(new ApiSuccessResult<string>(token));
+        //}
 
-            return await Task.FromResult(new ApiSuccessResult<string>(token));
-        }
+        //public async Task<ApiResult<string>> ResetPasswordAsync(ResetPasswordResource request)
+        //{
+        //    var user = await _userManager.FindByEmailAsync(request.Email);
 
-        public async Task<ApiResult<string>> ResetPasswordAsync(ResetPasswordResource request)
-        {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+        //    if (user is null)
+        //    {
+        //        return await Task.FromResult(new ApiErrorResult<string>("Người dùng không tồn tại"));
+        //    }
 
-            if (user is null)
-            {
-                return await Task.FromResult(new ApiErrorResult<string>("Người dùng không tồn tại"));
-            }
+        //    var result = await _userManager.ResetPasswordAsync(user, request.Token, request.Password);
 
-            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.Password);
+        //    if (result.Succeeded)
+        //    {
+        //        return await Task.FromResult(new ApiSuccessResult<string>("Đã cập nhật mật khẩu"));
+        //    }
 
-            if (result.Succeeded)
-            {
-                return await Task.FromResult(new ApiSuccessResult<string>("Đã cập nhật mật khẩu"));
-            }
-
-            return await Task.FromResult(new ApiErrorResult<string>("Tạo mới mật khẩu thất bại"));
-        }
+        //    return await Task.FromResult(new ApiErrorResult<string>("Tạo mới mật khẩu thất bại"));
+        //}
     }
 }

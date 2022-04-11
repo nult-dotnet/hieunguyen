@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.PostgresSqlMigrations.Migrations
 {
     [DbContext(typeof(BackendDbContext))]
-    [Migration("20220408050425_update-brand-model")]
-    partial class updatebrandmodel
+    [Migration("20220411142436_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -55,9 +55,6 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -111,7 +108,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 1,
                             Alias = "laptop-dell",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 8, 12, 4, 25, 230, DateTimeKind.Local).AddTicks(5312),
+                            CreatedDate = new DateTime(2022, 4, 11, 21, 24, 35, 765, DateTimeKind.Local).AddTicks(7555),
                             Name = "Laptop Dell",
                             ProductTypeId = 4
                         },
@@ -120,7 +117,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 2,
                             Alias = "laptop-macbook",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 8, 12, 4, 25, 231, DateTimeKind.Local).AddTicks(4290),
+                            CreatedDate = new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4556),
                             Name = "Laptop Macbook",
                             ProductTypeId = 4
                         },
@@ -129,7 +126,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 3,
                             Alias = "laptop-hp",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 8, 12, 4, 25, 231, DateTimeKind.Local).AddTicks(4388),
+                            CreatedDate = new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4617),
                             Name = "Laptop HP",
                             ProductTypeId = 4
                         },
@@ -138,7 +135,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 4,
                             Alias = "laptop-acer",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 8, 12, 4, 25, 231, DateTimeKind.Local).AddTicks(4392),
+                            CreatedDate = new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4620),
                             Name = "Laptop Acer",
                             ProductTypeId = 4
                         },
@@ -147,7 +144,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                             Id = 5,
                             Alias = "laptop-asus",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 8, 12, 4, 25, 231, DateTimeKind.Local).AddTicks(4426),
+                            CreatedDate = new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4622),
                             Name = "Laptop Asus",
                             ProductTypeId = 4
                         });
@@ -292,9 +289,6 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("text");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -304,9 +298,6 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         .HasColumnType("character varying(20)")
                         .HasMaxLength(20);
 
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.ToTable("Role");
@@ -315,50 +306,21 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "2489eba4-de4f-41f7-8bdf-325c4284d0c5",
                             Description = "Quản trị viên",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
+                            Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "47134eca-ad2b-4159-8ec7-d5eceee39aef",
                             Description = "Người bán hàng",
-                            Name = "Partner",
-                            NormalizedName = "PARTNER"
+                            Name = "Partner"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "0c818811-a900-4e68-8ca9-0fb1d3a53da5",
                             Description = "Người dùng đã đăng ký",
-                            Name = "User",
-                            NormalizedName = "USER"
+                            Name = "User"
                         });
-                });
-
-            modelBuilder.Entity("Backend.Data.Entities.RoleClaim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("RoleClaim");
                 });
 
             modelBuilder.Entity("Backend.Data.Entities.User", b =>
@@ -371,18 +333,12 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         .HasAnnotation("SqlServer:IdentitySeed", 4)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Address")
                         .HasColumnType("character varying(500)")
                         .HasMaxLength(500);
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("Date");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("character varying(100)")
@@ -396,9 +352,6 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("FirstMiddleName")
                         .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
@@ -410,24 +363,12 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("Date");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
@@ -436,17 +377,8 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         .HasColumnType("character varying(11)")
                         .HasMaxLength(11);
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
                     b.Property<int>("Status")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -461,114 +393,43 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         new
                         {
                             Id = 1,
-                            AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "5f9eeed7-e956-485c-b9e9-da303bb66491",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hieutanmy321@gmail.com",
-                            EmailConfirmed = false,
                             FirstMiddleName = "Nguyễn Trung",
                             Gender = 0,
                             LastName = "Hiếu",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "HIEUTANMY321@GMAIL.COM",
-                            NormalizedUserName = "HIEUNGUYEN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKzlzdavqt373T7aTRXJd2/soNOtGQMrrna3i1F5GTtMg9spgXtGM9lhSQv0ZHekcw==",
+                            PasswordHash = "9761509327fd5beca49c1c588df59ef8dc957a3e4ef6870190589455e8c60045",
                             PhoneNumber = "0965924083",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "ee51ba9c-2bd7-4375-9e4e-19339fc91e31",
                             Status = 0,
-                            TwoFactorEnabled = false,
                             UserName = "hieunguyen"
                         },
                         new
                         {
                             Id = 2,
-                            AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "7b8629bf-12a3-40e5-ac35-24a9cf9d200d",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hieuvo@gmail.com",
-                            EmailConfirmed = false,
                             FirstMiddleName = "Võ Trọng",
                             Gender = 0,
                             LastName = "Hiếu",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "HIEUVO@GMAIL.COM",
-                            NormalizedUserName = "HIEUVO",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDGaZZj/9+TQZhNOiHyra6rLapoOrBMTo4DUqbvdtu74NwWmamWF4nbei59FMgGTuA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "4405b88e-f1f3-4ab5-a321-e5b0779d2055",
+                            PasswordHash = "9761509327fd5beca49c1c588df59ef8dc957a3e4ef6870190589455e8c60045",
                             Status = 0,
-                            TwoFactorEnabled = false,
                             UserName = "hieuvo"
                         },
                         new
                         {
                             Id = 3,
-                            AccessFailedCount = 0,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
-                            ConcurrencyStamp = "eae458e2-2bad-49cb-b04f-88966ab4b10b",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "dat@gmail.com",
-                            EmailConfirmed = false,
                             FirstMiddleName = "Lê Tấn",
                             Gender = 0,
                             LastName = "Đạt",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "DAT@GMAIL.COM",
-                            NormalizedUserName = "DATLE",
-                            PasswordHash = "AQAAAAEAACcQAAAAENDUicEeCTYKsT4DE1kXzNKTSehFmfcelOUwTwYX1cXtmhbVD3Q4uRDRJAvEzVzNqg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "6c9506c5-2a9f-43e7-b472-107c24f41f66",
+                            PasswordHash = "9761509327fd5beca49c1c588df59ef8dc957a3e4ef6870190589455e8c60045",
                             Status = 0,
-                            TwoFactorEnabled = false,
                             UserName = "datle"
                         });
-                });
-
-            modelBuilder.Entity("Backend.Data.Entities.UserClaim", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserClaim");
-                });
-
-            modelBuilder.Entity("Backend.Data.Entities.UserLogin", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserLogin");
                 });
 
             modelBuilder.Entity("Backend.Data.Entities.UserRole", b =>
@@ -593,33 +454,14 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         },
                         new
                         {
-                            RoleId = 2,
+                            RoleId = 3,
                             UserId = 2
                         },
                         new
                         {
                             RoleId = 3,
-                            UserId = 2
+                            UserId = 3
                         });
-                });
-
-            modelBuilder.Entity("Backend.Data.Entities.UserToken", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("text");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("UserToken");
                 });
 
             modelBuilder.Entity("Backend.Data.Entities.Brand", b =>
@@ -664,33 +506,6 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Backend.Data.Entities.RoleClaim", b =>
-                {
-                    b.HasOne("Backend.Data.Entities.Role", "Role")
-                        .WithMany("RoleClaims")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Backend.Data.Entities.UserClaim", b =>
-                {
-                    b.HasOne("Backend.Data.Entities.User", "User")
-                        .WithMany("UserClaims")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Backend.Data.Entities.UserLogin", b =>
-                {
-                    b.HasOne("Backend.Data.Entities.User", "User")
-                        .WithMany("UserLogins")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Backend.Data.Entities.UserRole", b =>
                 {
                     b.HasOne("Backend.Data.Entities.Role", "Role")
@@ -701,15 +516,6 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
                     b.HasOne("Backend.Data.Entities.User", "User")
                         .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Backend.Data.Entities.UserToken", b =>
-                {
-                    b.HasOne("Backend.Data.Entities.User", "User")
-                        .WithMany("UserTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

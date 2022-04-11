@@ -12,7 +12,6 @@ using Backend.Data.Enums;
 using Backend.Repository.UnitOfWork;
 using Backend.Utilities.SystemConstants;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,13 +22,11 @@ namespace Backend.Application.Brands.Services
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly UserManager<User> _userManager;
 
-        public BrandService(IMapper mapper, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork, UserManager<User> userManager)
+        public BrandService(IMapper mapper, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork)
         {
             _mapper = mapper; _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
-            _userManager = userManager;
         }
 
         public async Task<ApiResult<List<Brand>>> GetAllAsync()
@@ -51,9 +48,9 @@ namespace Backend.Application.Brands.Services
         public async Task<ApiResult<Brand>> GetByOwnerUser()
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var brand = _unitOfWork.Brands
+            var brand = await _unitOfWork.Brands
                 .FindByCondition(x => x.UserId.Equals(int.Parse(userId)))
-                .FirstOrDefault();
+                .SingleOrDefaultAsync();
 
             return await Task.FromResult(new ApiSuccessResult<Brand>(brand));
         }
@@ -62,7 +59,9 @@ namespace Backend.Application.Brands.Services
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var currentBrand = _unitOfWork.Brands.FindByCondition(x => x.Name == resource.Name && x.Status!=(int) BrandStatus.STOP).FirstOrDefault();
+            var currentBrand = await _unitOfWork.Brands
+                .FindByCondition(x => x.Name == resource.Name && x.Status!=(int) BrandStatus.STOP)
+                .SingleOrDefaultAsync();
 
             var isAdmin = _httpContextAccessor.HttpContext.User.IsInRole(Constants.ADMIN);
             var isPartner = _httpContextAccessor.HttpContext.User.IsInRole(Constants.PARTNER);
@@ -78,14 +77,20 @@ namespace Backend.Application.Brands.Services
             if (!isAdmin)
             {
                 brand.UserId = int.Parse(userId);
-                var user = await _userManager.FindByIdAsync(userId);
+                var user = await _unitOfWork.Users.FindByIdAsync(int.Parse(userId));
                 if (!isPartner)
                 {
-                    var result = await _userManager.AddToRoleAsync(user, Constants.PARTNER_ROLE_NAME);
-
-                    if (!result.Succeeded)
-                        return await Task.FromResult(new ApiErrorResult<Brand>("Không thể thêm thương hiệu"));
+                    await _unitOfWork.UserRoles.CreateAsync(new UserRole()
+                    {
+                        UserId = int.Parse(userId),
+                        RoleId = 2
+                    });
                 }
+                else
+                {
+                    return await Task.FromResult(new ApiErrorResult<Brand>("Người dùng đã có thương thiệu"));
+                }
+
             }
 
             brand.TotalRate = 0;

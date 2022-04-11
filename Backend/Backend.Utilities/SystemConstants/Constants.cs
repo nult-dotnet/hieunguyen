@@ -2,7 +2,7 @@
 {
     public static class Constants
     {
-        public const string CURRENT_USER = "CURRENTUSER";
+        public const string CURRENT_USER = "CURRENT_USER";
 
         public const string USER_ROLE_NAME = "USER";
 

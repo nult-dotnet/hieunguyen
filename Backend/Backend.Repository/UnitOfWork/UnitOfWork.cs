@@ -4,6 +4,7 @@ using Backend.Repository.Brand;
 using Backend.Repository.Product;
 using Backend.Repository.ProductPhoto;
 using Backend.Repository.User;
+using Backend.Repository.UserRole;
 
 namespace Backend.Repository.UnitOfWork
 {
@@ -14,6 +15,7 @@ namespace Backend.Repository.UnitOfWork
         private IBrandRepository _brands;
         private IProductRepository _products;
         private IProductPhotoRepository _productPhotos;
+        private IUserRoleRepository _userRoles;
 
         public UnitOfWork(BackendDbContext context)
         {
@@ -21,6 +23,7 @@ namespace Backend.Repository.UnitOfWork
         }
 
         public IUserRepository Users => _users ??= new UserRepository(_context);
+        public IUserRoleRepository UserRoles => _userRoles ??= new UserRoleRepository(_context);
         public IBrandRepository Brands => _brands ??= new BrandRepository(_context);
         public IProductRepository Products => _products ??= new ProductRepository(_context);
         public IProductPhotoRepository ProductPhotos => _productPhotos ??= new ProductPhotoRepository(_context);

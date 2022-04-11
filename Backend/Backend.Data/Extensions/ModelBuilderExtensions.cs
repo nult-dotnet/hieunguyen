@@ -1,7 +1,7 @@
 ﻿using System;
 using Backend.Data.Entities;
 using Backend.Data.Enums;
-using Microsoft.AspNetCore.Identity;
+using Backend.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Data.Extensions
@@ -10,13 +10,12 @@ namespace Backend.Data.Extensions
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
-            var hasher = new PasswordHasher<User>();
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
                     Id = 1,
                     UserName = "hieunguyen",
-                    PasswordHash = hasher.HashPassword(null, "Hieu@123"),
+                    PasswordHash = Encryptor.SHA256Hash("Hieu@123"),
                     FirstMiddleName = "Nguyễn Trung",
                     LastName = "Hiếu",
                     Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
@@ -24,39 +23,30 @@ namespace Backend.Data.Extensions
                     Gender = Gender.MALE,
                     Email = "hieutanmy321@gmail.com",
                     PhoneNumber = "0965924083",
-                    SecurityStamp = Guid.NewGuid().ToString("D"),
-                    NormalizedUserName = "HIEUNGUYEN",
-                    NormalizedEmail = "HIEUTANMY321@GMAIL.COM"
                 },
                 new User
                 {
                     Id = 2,
                     UserName = "hieuvo",
-                    PasswordHash = hasher.HashPassword(null, "Hieu@123"),
+                    PasswordHash = Encryptor.SHA256Hash("Hieu@123"),
                     FirstMiddleName = "Võ Trọng",
                     LastName = "Hiếu",
                     Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
                     Status = 0,
                     Gender = Gender.MALE,
                     Email = "hieuvo@gmail.com",
-                    SecurityStamp = Guid.NewGuid().ToString("D"),
-                    NormalizedUserName = "HIEUVO",
-                    NormalizedEmail = "HIEUVO@GMAIL.COM"
                 },
                 new User
                 {
                     Id = 3,
                     UserName = "datle",
-                    PasswordHash = hasher.HashPassword(null, "Hieu@123"),
+                    PasswordHash = Encryptor.SHA256Hash("Hieu@123"),
                     FirstMiddleName = "Lê Tấn",
                     LastName = "Đạt",
                     Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
                     Status = 0,
                     Gender = Gender.MALE,
                     Email = "dat@gmail.com",
-                    SecurityStamp = Guid.NewGuid().ToString("D"),
-                    NormalizedUserName = "DATLE",
-                    NormalizedEmail = "DAT@GMAIL.COM"
                 }
             );
 
@@ -65,21 +55,18 @@ namespace Backend.Data.Extensions
                 {
                     Id = 1,
                     Name = "Admin",
-                    NormalizedName = "ADMIN",
                     Description = "Quản trị viên"
                 },
                 new Role
                 {
                     Id = 2,
                     Name = "Partner",
-                    NormalizedName = "PARTNER",
                     Description = "Người bán hàng"
                 },
                 new Role
                 {
                     Id = 3,
                     Name = "User",
-                    NormalizedName = "USER",
                     Description = "Người dùng đã đăng ký"
                 }
             );
@@ -93,11 +80,11 @@ namespace Backend.Data.Extensions
                 new UserRole
                 {
                     UserId = 2,
-                    RoleId = 2
+                    RoleId = 3
                 },
                 new UserRole
                 {
-                    UserId = 2,
+                    UserId = 3,
                     RoleId = 3
                 }
             );

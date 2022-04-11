@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -140,9 +139,8 @@ namespace Backend.WebApi
 
             // For use BackendDbContext
             services.AddDbContext<BackendDbContext>();
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<BackendDbContext>()
-                .AddDefaultTokenProviders();
+
+            services.AddScoped<IMongoDbContext, MongoDbContext>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IUserService, UserService>();
@@ -150,8 +148,6 @@ namespace Backend.WebApi
             services.AddTransient<IBrandService, BrandService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
-            services.AddTransient<UserManager<User>, UserManager<User>>();
-            services.AddTransient<SignInManager<User>, SignInManager<User>>();
 
             services.AddControllers();
         }

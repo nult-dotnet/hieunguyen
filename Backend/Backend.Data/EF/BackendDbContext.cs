@@ -2,12 +2,11 @@
 using Backend.Data.Entities;
 using Backend.Data.Extensions;
 using Backend.Data.MultipleProviderHandle;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Data.EF
 {
-    public class BackendDbContext : IdentityDbContext<User, Role, int, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+    public class BackendDbContext : DbContext
     {
         public BackendDbContext(DbContextOptions options) : base(options) { }
 
@@ -28,10 +27,6 @@ namespace Backend.Data.EF
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
-            modelBuilder.ApplyConfiguration(new RoleClaimConfiguration());
-            modelBuilder.ApplyConfiguration(new UserClaimConfiguration());
-            modelBuilder.ApplyConfiguration(new UserLoginConfiguration());
-            modelBuilder.ApplyConfiguration(new UserTokenConfiguration());
             modelBuilder.ApplyConfiguration(new BrandConfiguration());
 
             modelBuilder.Seed();

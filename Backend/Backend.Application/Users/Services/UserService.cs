@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Backend.Application.Common.Models;
@@ -9,9 +8,8 @@ using Backend.Application.Users.Models;
 using Backend.Data.Entities;
 using Backend.Data.Enums;
 using Backend.Repository.UnitOfWork;
-using Backend.Utilities.SystemConstants;
+using Backend.Utilities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,14 +18,11 @@ namespace Backend.Application.Users.Services
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
-        private readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(UserManager<User> userManager, IMapper mapper,
-            IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork)
+        public UserService(IMapper mapper, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork)
         {
-            _userManager = userManager;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
@@ -35,7 +30,9 @@ namespace Backend.Application.Users.Services
 
         public async Task<ApiResult<string>> CreateAsync(CreateUserResource request)
         {
-            var userEmail = await _userManager.FindByEmailAsync(request.Email);
+            var userEmail = await _unitOfWork.Users
+                .FindByCondition(x=>x.Email==request.Email)
+                .SingleOrDefaultAsync();
             var listUser = await _unitOfWork.Users
                 .FindByCondition(x => x.UserName.Equals(request.UserName) && x.Status != UserStatus.DELETED)
                 .ToListAsync();
@@ -49,15 +46,21 @@ namespace Backend.Application.Users.Services
             user.CreatedDate = DateTime.Now;
             user.Status = UserStatus.ACTIVE;
             user.CreatedBy = request.UserName;
+            user.PasswordHash = Encryptor.SHA256Hash(request.Password);
 
             try
             {
-                await _userManager.CreateAsync(user, request.Password);
-                await _userManager.AddToRoleAsync(user, Constants.USER_ROLE_NAME);
+                await _unitOfWork.Users.CreateAsync(user);
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.UserRoles.CreateAsync(new UserRole()
+                {
+                    UserId = user.Id,
+                    RoleId = 3
+                });
+                await _unitOfWork.SaveChangesAsync();
             }
             catch
             {
-                await _userManager.DeleteAsync(user);
                 return await Task.FromResult(new ApiErrorResult<string>("Đăng ký thất bại"));
             }
 
@@ -66,7 +69,7 @@ namespace Backend.Application.Users.Services
 
         public async Task<ApiResult<UserVm>> GetByIdAsync(int userId)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _unitOfWork.Users.FindByIdAsync(userId);
 
             if (user is null || user.Status.Equals(UserStatus.DELETED))
             {
@@ -74,8 +77,7 @@ namespace Backend.Application.Users.Services
             }
 
             var result = _mapper.Map<UserVm>(user);
-            var roles = await _userManager.GetRolesAsync(user);
-            result.UserInRole = roles.ToList();
+            result.UserInRole = null;
 
             return await Task.FromResult(new ApiSuccessResult<UserVm>(result));
         }
@@ -93,18 +95,12 @@ namespace Backend.Application.Users.Services
 
             var result = _mapper.Map<List<UserVm>>(users);
 
-            for (var i = 0; i < users.Count; i++)
-            {
-                var role = await _userManager.GetRolesAsync(users[i]);
-                result[i].UserInRole = role.ToList();
-            }
-
             return await Task.FromResult(new ApiSuccessResult<List<UserVm>>(result));
         }
 
         public async Task<ApiResult<string>> UpdateAsync(int id, UpdateUserResource request)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _unitOfWork.Users.FindByIdAsync(id);
 
             if (user is null)
             {
@@ -117,7 +113,8 @@ namespace Backend.Application.Users.Services
             {
                 user.Map(request);
                 user.ModifiedBy = username;
-                await _userManager.UpdateAsync(user);
+                _unitOfWork.Users.Update(user);
+                await _unitOfWork.SaveChangesAsync();
             }
             catch
             {
@@ -129,26 +126,23 @@ namespace Backend.Application.Users.Services
 
         public async Task<ApiResult<string>> DeleteAsync(int userId)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _unitOfWork.Users.FindByIdAsync(userId);
             if (user is null)
             {
                 return new ApiErrorResult<string>("Người dùng không tồn tại");
             }
 
             user.Status = UserStatus.DELETED;
-            var result = await _userManager.UpdateAsync(user);
+            _unitOfWork.Users.Update(user);
 
-            if (result.Succeeded)
-            {
-                return await Task.FromResult(new ApiSuccessResult<string>("Xóa người dùng thành công"));
-            }
+            await _unitOfWork.SaveChangesAsync();
 
             return await Task.FromResult(new ApiErrorResult<string>("Xóa người dùng thất bại"));
         }
 
         public async Task<ApiResult<string>> UpdatePatchAsync(int id, JsonPatchDocument request)
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _unitOfWork.Users.FindByIdAsync(id);
 
             if (user is null)
             {

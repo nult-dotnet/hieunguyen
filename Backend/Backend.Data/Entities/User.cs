@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Backend.Data.Enums;
-using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Data.Entities
 {
-    public class User : IdentityUser<int>
+    public class User
     {
+        public int Id { get; set; }
+        public string UserName { get; set; }
+        public virtual string PasswordHash { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
         public string FirstMiddleName { get; set; }
         public string LastName { get; set; }
         public string Address { get; set; }
@@ -20,8 +24,5 @@ namespace Backend.Data.Entities
 
         public ICollection<Brand> Brands { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
-        public ICollection<UserClaim> UserClaims { get; set; }
-        public ICollection<UserLogin> UserLogins { get; set; }
-        public ICollection<UserToken> UserTokens { get; set; }
     }
 }
