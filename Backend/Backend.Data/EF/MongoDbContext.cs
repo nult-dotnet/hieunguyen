@@ -15,6 +15,11 @@ namespace Backend.Data.EF
         private readonly List<Func<Task>> _commands;
         private readonly IConfiguration _configuration;
 
+        public MongoDbContext()
+        {
+
+        }
+
         public MongoDbContext(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -29,7 +34,7 @@ namespace Backend.Data.EF
             GC.SuppressFinalize(this);
         }
 
-        public async Task<int> SaveChanges()
+        public async Task<int> SaveChangeAsync()
         {
             ConfigureMongo();
 

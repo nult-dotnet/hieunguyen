@@ -1,32 +1,41 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Backend.Data.EF;
-using Backend.Repository.Brand;
-using Backend.Repository.Product;
-using Backend.Repository.ProductPhoto;
-using Backend.Repository.User;
-using Backend.Repository.UserRole;
+using Backend.Repository.Generic;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Backend.Repository.UnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    public sealed class UnitOfWork : IUnitOfWork
     {
+        private bool _disposed;
         private readonly BackendDbContext _context;
-        private IUserRepository _users;
-        private IBrandRepository _brands;
-        private IProductRepository _products;
-        private IProductPhotoRepository _productPhotos;
-        private IUserRoleRepository _userRoles;
+        private IDbContextTransaction _objTran;
+        private Dictionary<string, object> _repositories;
 
-        public UnitOfWork(BackendDbContext context)
+        public UnitOfWork()
         {
-            _context = context;
+            _context = new BackendDbContext();
         }
 
-        public IUserRepository Users => _users ??= new UserRepository(_context);
-        public IUserRoleRepository UserRoles => _userRoles ??= new UserRoleRepository(_context);
-        public IBrandRepository Brands => _brands ??= new BrandRepository(_context);
-        public IProductRepository Products => _products ??= new ProductRepository(_context);
-        public IProductPhotoRepository ProductPhotos => _productPhotos ??= new ProductPhotoRepository(_context);
+        public object Context => _context;
+
+        public void CreateTransaction()
+        {
+            _objTran = _context.Database.BeginTransaction();
+        }
+
+        public void Commit()
+        {
+            _objTran.Commit();
+        }
+
+        public void Rollback()
+        {
+            _objTran.Rollback();
+            _objTran.Dispose();
+        }
 
         public async Task<int> SaveChangesAsync()
         {
@@ -35,7 +44,21 @@ namespace Backend.Repository.UnitOfWork
 
         public void Dispose()
         {
-            _context?.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!_disposed)
+                if (disposing)
+                    _context.Dispose();
+            _disposed = true;
+        }
+
+        public class Repository<T> : GenericRepository<T> where T : class
+        {
+            public Repository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
         }
     }
 }

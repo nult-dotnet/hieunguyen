@@ -6,7 +6,7 @@ namespace Backend.Data.EF
 {
     public interface IMongoDbContext : IDisposable
     {
-        Task<int> SaveChanges();
+        Task<int> SaveChangeAsync();
         IMongoCollection<T> GetCollection<T>(string name);
     }
 }

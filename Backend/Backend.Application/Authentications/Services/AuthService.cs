@@ -1,39 +1,39 @@
-﻿using System;
+﻿using Backend.Application.Authentications.Models;
+using Backend.Application.Common.Models;
+using Backend.Data.Entities;
+using Backend.Data.Enums;
+using Backend.Repository.Generic;
+using Backend.Repository.UnitOfWork;
+using Backend.Utilities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
-using Backend.Application.Authentications.Models;
-using Backend.Application.Common.Models;
-using Backend.Data.Entities;
-using Backend.Data.Enums;
-using Backend.Repository.UnitOfWork;
-using Backend.Utilities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Application.Authentications.Services
 {
     public class AuthService : IAuthService
     {
         private readonly IConfiguration _config;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenericRepository<User> _userRepository;
+        private readonly IGenericRepository<UserRole> _userRoleRepository;
 
-        public AuthService(IConfiguration config, IHttpContextAccessor httpContextAccessor, IMapper mapper, IUnitOfWork unitOfWork)
+        public AuthService(IConfiguration config)
         {
             _config = config;
-            _httpContextAccessor = httpContextAccessor;
-            _unitOfWork = unitOfWork;
+            var unitOfWork = InstanceUnitOfWork.UnitOfWork();
+            _userRepository = InstanceGenericRepository<User>.Repository(unitOfWork);
+            _userRoleRepository = InstanceGenericRepository<UserRole>.Repository(unitOfWork);
         }
 
         public async Task<ApiResult<string>> AuthenticateAsync(AuthenticateResource request)
         {
-            var user = await _unitOfWork.Users
+            var user = await _userRepository
                 .FindByCondition(x=>x.Email == request.Email)
                 .SingleOrDefaultAsync();
 
@@ -47,7 +47,7 @@ namespace Backend.Application.Authentications.Services
                 return new ApiErrorResult<string>("Tài khoản đã bị khóa");
             }
 
-            var result = await _unitOfWork.Users
+            var result = await _userRepository
                 .FindByCondition(x =>
                     x.Email == request.Email && x.PasswordHash == Encryptor.SHA256Hash(request.Password))
                 .SingleOrDefaultAsync();
@@ -57,7 +57,7 @@ namespace Backend.Application.Authentications.Services
                 return await Task.FromResult(new ApiSuccessResult<string>("Đăng nhập thất bại"));
             }
 
-            var userRoles = await _unitOfWork.UserRoles
+            var userRoles = await _userRoleRepository
                 .FindByCondition(x => x.UserId == user.Id)
                 .ToListAsync();
 

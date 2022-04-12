@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Backend.Data.EF;
+using Backend.Repository.UnitOfWork;
 using MongoDB.Driver;
 using ServiceStack;
 
@@ -11,13 +12,12 @@ namespace Backend.Repository.Generic
 {
     public abstract class GenericRepositoryMongo<T> : IGenericRepository<T> where T : class
     {
-        protected readonly IMongoDbContext _context;
-        protected IMongoCollection<T> _dbSet;
+        private readonly IMongoCollection<T> _dbSet;
 
-        protected GenericRepositoryMongo(IMongoDbContext context)
+        protected GenericRepositoryMongo(IUnitOfWork unitOfWork)
         {
-            _context = context;
-            _dbSet = _context.GetCollection<T>(typeof(T).Name);
+            IMongoDbContext context = (MongoDbContext) unitOfWork.Context;
+            _dbSet = context.GetCollection<T>(typeof(T).Name);
         }
 
         public async Task<List<T>> FindAllAsync()

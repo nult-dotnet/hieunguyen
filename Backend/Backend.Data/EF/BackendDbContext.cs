@@ -10,6 +10,11 @@ namespace Backend.Data.EF
     {
         public BackendDbContext(DbContextOptions options) : base(options) { }
 
+        public BackendDbContext()
+        {
+
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (optionsBuilder.IsConfigured) return;

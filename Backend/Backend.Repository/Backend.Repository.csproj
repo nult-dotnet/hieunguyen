@@ -1,8 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="UnitOfWork\InstanceUnitOfWork.cs~RFddb5d00.TMP" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Backend.Data\Backend.Data.csproj" />

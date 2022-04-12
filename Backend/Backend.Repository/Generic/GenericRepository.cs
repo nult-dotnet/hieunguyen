@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Backend.Data.EF;
+using Backend.Repository.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Repository.Generic
@@ -13,9 +14,9 @@ namespace Backend.Repository.Generic
 
         protected BackendDbContext _context { get; set; }
 
-        public GenericRepository(BackendDbContext context)
+        public GenericRepository(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _context = (BackendDbContext) unitOfWork.Context;
         }
 
         public async Task CreateAsync(T entity)
