@@ -129,7 +129,7 @@ export const startUpdateBrand =
         phoneNumber: brand.phoneNumber,
         status: brand.status,
       };
-      const res = await update(brand.id, data);
+      const res = await update(brand.modelId, data);
 
       if (res.isSuccessed) {
         toast.info("Cập nhật thương hiệu thành công", {

@@ -1,5 +1,5 @@
 export interface Brand {
-  id: number;
+  modelId: number;
   name: string;
   totalRate: number;
   description: string;

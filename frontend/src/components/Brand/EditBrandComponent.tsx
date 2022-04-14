@@ -17,6 +17,8 @@ import {
   validatePhoneNumber,
   validateString,
 } from "../../services/validateForm";
+import * as jsonpatch from "fast-json-patch";
+import { applyOperation } from "fast-json-patch";
 
 type Props = LinkStateProps & LinkDispatchProps & WithRouterProps<Params>;
 
@@ -138,7 +140,7 @@ class EditBrandComponent extends Component<Props, UpdateBrandState> {
       phoneValid === ""
     ) {
       this.props.startUpdateBrand({
-        id: parseInt(id),
+        modelId: parseInt(id),
         name: name,
         totalRate: 0,
         description: description,
@@ -186,48 +188,40 @@ class EditBrandComponent extends Component<Props, UpdateBrandState> {
       statusChange,
     } = this.state;
     const id = this.props.match.params.id;
-    const patch = [];
+
+    const data = {
+      name: "",
+      phoneNumber: "",
+      address: "",
+      description: "",
+      status: "",
+    };
+
+    const observer: any = jsonpatch.observe(data);
 
     if (nameChange === true) {
-      patch.push({
-        op: "replace",
-        path: "name",
-        value: name,
-      });
+      data.name = name;
     }
 
     if (addressChange === true) {
-      patch.push({
-        op: "replace",
-        path: "address",
-        value: address,
-      });
+      data.address = address;
     }
 
     if (descriptionChange === true) {
-      patch.push({
-        op: "replace",
-        path: "description",
-        value: description,
-      });
+      data.description = description;
     }
 
     if (phoneNumberChange === true) {
-      patch.push({
-        op: "replace",
-        path: "phoneNumber",
-        value: phoneNumber,
-      });
+      data.phoneNumber = phoneNumber;
     }
 
     if (statusChange === true) {
-      patch.push({
-        op: "replace",
-        path: "status",
-        value: status,
-      });
+      data.status = status;
     }
 
+    var patch = jsonpatch.generate(observer);
+
+    debugger;
     if (
       name !== "" &&
       address !== "" &&

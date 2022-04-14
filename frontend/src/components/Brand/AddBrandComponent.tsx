@@ -87,7 +87,7 @@ class AddBrandComponent extends Component<Props, AddBrandState> {
       phoneValid === ""
     ) {
       this.props.startAddBrand({
-        id: 0,
+        modelId: 0,
         name: name,
         totalRate: 0,
         description: description,

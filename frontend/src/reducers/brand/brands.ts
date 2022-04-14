@@ -18,10 +18,10 @@ const brandReducer = (
     case types.ADD_BRAND:
       return [...state, action.brand];
     case types.DELETE_BRAND:
-      return state.filter(({ id }) => id !== action.id);
+      return state.filter(({ modelId }) => modelId !== action.id);
     case types.UPDATE_BRAND || types.PATCH_BRAND:
       return state.map((brand) => {
-        if (brand.id === action.brand.id) {
+        if (brand.modelId === action.brand.modelId) {
           return {
             ...brand,
             ...action.brand,

@@ -81,9 +81,9 @@ class Index extends React.Component<Props> {
             </TableHead>
             <TableBody>
               {brands.map((brand) => (
-                <StyledTableRow key={brand.id}>
+                <StyledTableRow key={brand.modelId}>
                   <StyledTableCell component="th" scope="row">
-                    {brand.id}
+                    {brand.modelId}
                   </StyledTableCell>
                   <StyledTableCell align="center">{brand.name}</StyledTableCell>
                   <StyledTableCell align="center">
@@ -120,7 +120,7 @@ class Index extends React.Component<Props> {
                       aria-label="contained primary button group"
                     >
                       <Button
-                        onClick={() => this.onDelete(brand.id)}
+                        onClick={() => this.onDelete(brand.modelId)}
                         style={{ marginRight: "10px" }}
                         color="error"
                       >
@@ -128,7 +128,7 @@ class Index extends React.Component<Props> {
                       </Button>
                       <Button
                         onClick={() =>
-                          (window.location.href = `/edit/${brand.id}`)
+                          (window.location.href = `/edit/${brand.modelId}`)
                         }
                         color="primary"
                       >
