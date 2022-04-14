@@ -11,7 +11,7 @@ namespace Backend.Repository.Generic
             string databaseDefault = DbStringSettings.GetDefaultDbValue();
             try
             {
-                if (databaseDefault.Equals("MongoDB"))
+                if (databaseDefault.Equals("MongoDb"))
                 {
                     return new UnitOfWorkMongo.Repository<T>(unitOfWork);
                 }

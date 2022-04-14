@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Backend.Data.Enums;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Backend.Data.Entities
 {
+    [BsonIgnoreExtraElements]
     public class User
     {
-        public int Id { get; set; }
+        public int ModelId { get; set; }
         public string UserName { get; set; }
         public virtual string PasswordHash { get; set; }
         public string Email { get; set; }

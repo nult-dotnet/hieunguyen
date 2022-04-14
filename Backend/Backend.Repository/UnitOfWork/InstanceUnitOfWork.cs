@@ -1,4 +1,5 @@
 ﻿using System;
+using Backend.Data.EF;
 using Backend.Data.MultipleProviderHandle;
 
 namespace Backend.Repository.UnitOfWork
@@ -7,14 +8,16 @@ namespace Backend.Repository.UnitOfWork
     {
         public static IUnitOfWork UnitOfWork()
         {
+            var mongoContext = new MongoDbContext();
+            var context = new BackendDbContext();
             string databaseDefault = DbStringSettings.GetDefaultDbValue();
             try
             {
-                if (databaseDefault.Equals("MongoDB"))
+                if (databaseDefault.Equals("MongoDb"))
                 {
-                    return new UnitOfWorkMongo();
+                    return new UnitOfWorkMongo(mongoContext);
                 }
-                return new UnitOfWork();
+                return new UnitOfWork(context);
             }
             catch
             {

@@ -116,10 +116,9 @@ namespace Backend.Application.Products.Services
 
         public async Task<ApiResult<Product>> GetProductByIdAsync(int productId)
         {
-            var product = await _productRepository
-                .FindByCondition(x => x.Id == productId && x.Status != ProductStatus.DELETED)
-                .Include(x=>x.ProductPhotos)
-                .SingleOrDefaultAsync();
+            var product = _productRepository
+                .FindByCondition(x => x.ModelId == productId && x.Status != ProductStatus.DELETED)
+                .SingleOrDefault();
 
             if (product is null)
             {
@@ -138,11 +137,11 @@ namespace Backend.Application.Products.Services
 
         public async Task<ApiResult<List<Product>>> GetAllProductAsync()
         {
-            var products = await _productRepository
+            var products = _productRepository
                 .FindByCondition(x => x.Status != ProductStatus.DELETED)
-                .ToListAsync();
+                .ToList();
 
-            if (products is null)
+            if (products.Count == 0)
             {
                 return await Task.FromResult(new ApiErrorResult<List<Product>>("Không tìm thấy sản phẩm"));
             }
@@ -152,12 +151,11 @@ namespace Backend.Application.Products.Services
 
         public async Task<ApiResult<List<Product>>> GetProductByBrandAsync(int id)
         {
-            var listProduct = await _productRepository
+            var listProduct = _productRepository
                 .FindByCondition(x => x.BrandId == id)
-                .Include(x=>x.ProductPhotos)
-                .ToListAsync();
+                .ToList();
 
-            if (listProduct is null || listProduct.Count == 0)
+            if (listProduct.Count == 0)
             {
                 return await Task.FromResult(new ApiErrorResult<List<Product>>("Không tìm thấy sản phẩm"));
             }
@@ -169,11 +167,11 @@ namespace Backend.Application.Products.Services
 
         public async Task<ApiResult<string>> DisableAsync(int productId)
         {
-            var product = await _productRepository
-                .FindByCondition(x => x.Id == productId
+            var product = _productRepository
+                .FindByCondition(x => x.ModelId == productId
                                       && x.Status != ProductStatus.DELETED
                                       && x.Status != ProductStatus.HIDDEN)
-                .SingleOrDefaultAsync();
+                .SingleOrDefault();
 
             if (product is null)
             {
@@ -191,11 +189,11 @@ namespace Backend.Application.Products.Services
 
         public async Task<ApiResult<string>> EnableAsync(int productId)
         {
-            var product = await _productRepository
-                .FindByCondition(x => x.Id == productId
+            var product = _productRepository
+                .FindByCondition(x => x.ModelId == productId
                                       && x.Status != ProductStatus.DELETED
                                       && x.Status == ProductStatus.HIDDEN)
-                .SingleOrDefaultAsync();
+                .SingleOrDefault();
 
             if (product is null)
             {
@@ -216,9 +214,9 @@ namespace Backend.Application.Products.Services
             foreach (var p in products)
             {
                 var path = _storageService.CreateProductPath(p.CategoryId, p.Name);
-                var photos = await _productPhotoRepository
-                    .FindByCondition(x=>x.ProductId == p.Id)
-                    .ToListAsync();
+                var photos = _productPhotoRepository
+                    .FindByCondition(x=>x.ProductId == p.ModelId)
+                    .ToList();
                 p.ProductPhotos = new List<ProductPhoto>();
 
                 for (var i = 0; i < 2; i++)

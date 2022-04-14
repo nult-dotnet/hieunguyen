@@ -13,6 +13,6 @@ namespace Backend.Repository.Generic
         Task CreateAsync(T entity);
         void Update(T entity);
         void Delete(T entity);
-        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
+        IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression);
     }
 }

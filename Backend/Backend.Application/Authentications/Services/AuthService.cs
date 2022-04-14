@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,9 +34,9 @@ namespace Backend.Application.Authentications.Services
 
         public async Task<ApiResult<string>> AuthenticateAsync(AuthenticateResource request)
         {
-            var user = await _userRepository
+            var user = _userRepository
                 .FindByCondition(x=>x.Email == request.Email)
-                .SingleOrDefaultAsync();
+                .SingleOrDefault();
 
             if (user is null || user.Status.Equals(UserStatus.DELETED))
             {
@@ -47,19 +48,18 @@ namespace Backend.Application.Authentications.Services
                 return new ApiErrorResult<string>("Tài khoản đã bị khóa");
             }
 
-            var result = await _userRepository
+            var result = _userRepository
                 .FindByCondition(x =>
                     x.Email == request.Email && x.PasswordHash == Encryptor.SHA256Hash(request.Password))
-                .SingleOrDefaultAsync();
+                .SingleOrDefault();
 
             if (result is null)
             {
                 return await Task.FromResult(new ApiSuccessResult<string>("Đăng nhập thất bại"));
             }
-
-            var userRoles = await _userRoleRepository
-                .FindByCondition(x => x.UserId == user.Id)
-                .ToListAsync();
+            
+            var userRoles = _userRoleRepository
+                .FindByCondition(x => x.UserId == user.ModelId);
 
             var roles = new List<string>();
 
@@ -103,7 +103,7 @@ namespace Backend.Application.Authentications.Services
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, string.Join(",", roles)),
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.ModelId.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]));

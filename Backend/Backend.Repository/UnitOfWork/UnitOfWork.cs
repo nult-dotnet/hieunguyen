@@ -14,9 +14,9 @@ namespace Backend.Repository.UnitOfWork
         private IDbContextTransaction _objTran;
         private Dictionary<string, object> _repositories;
 
-        public UnitOfWork()
+        public UnitOfWork(BackendDbContext context)
         {
-            _context = new BackendDbContext();
+            _context = context;
         }
 
         public object Context => _context;

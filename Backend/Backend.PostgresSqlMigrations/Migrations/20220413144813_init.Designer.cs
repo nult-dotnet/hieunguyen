@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.PostgresSqlMigrations.Migrations
 {
     [DbContext(typeof(BackendDbContext))]
-    [Migration("20220411142436_init")]
+    [Migration("20220413144813_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
             modelBuilder.Entity("Backend.Data.Entities.Brand", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ModelId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -54,7 +54,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("ModelId");
 
                     b.HasIndex("UserId");
 
@@ -63,7 +63,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
             modelBuilder.Entity("Backend.Data.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ModelId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -96,7 +96,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                     b.Property<int>("ProductTypeId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("ModelId");
 
                     b.HasIndex("ProductTypeId");
 
@@ -105,46 +105,46 @@ namespace Backend.PostgresSqlMigrations.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            ModelId = 1,
                             Alias = "laptop-dell",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 11, 21, 24, 35, 765, DateTimeKind.Local).AddTicks(7555),
+                            CreatedDate = new DateTime(2022, 4, 13, 21, 48, 12, 765, DateTimeKind.Local).AddTicks(9085),
                             Name = "Laptop Dell",
                             ProductTypeId = 4
                         },
                         new
                         {
-                            Id = 2,
+                            ModelId = 2,
                             Alias = "laptop-macbook",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4556),
+                            CreatedDate = new DateTime(2022, 4, 13, 21, 48, 12, 766, DateTimeKind.Local).AddTicks(6025),
                             Name = "Laptop Macbook",
                             ProductTypeId = 4
                         },
                         new
                         {
-                            Id = 3,
+                            ModelId = 3,
                             Alias = "laptop-hp",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4617),
+                            CreatedDate = new DateTime(2022, 4, 13, 21, 48, 12, 766, DateTimeKind.Local).AddTicks(6080),
                             Name = "Laptop HP",
                             ProductTypeId = 4
                         },
                         new
                         {
-                            Id = 4,
+                            ModelId = 4,
                             Alias = "laptop-acer",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4620),
+                            CreatedDate = new DateTime(2022, 4, 13, 21, 48, 12, 766, DateTimeKind.Local).AddTicks(6083),
                             Name = "Laptop Acer",
                             ProductTypeId = 4
                         },
                         new
                         {
-                            Id = 5,
+                            ModelId = 5,
                             Alias = "laptop-asus",
                             CreatedBy = "hieunguyen",
-                            CreatedDate = new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4622),
+                            CreatedDate = new DateTime(2022, 4, 13, 21, 48, 12, 766, DateTimeKind.Local).AddTicks(6085),
                             Name = "Laptop Asus",
                             ProductTypeId = 4
                         });
@@ -152,7 +152,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
             modelBuilder.Entity("Backend.Data.Entities.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ModelId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -198,7 +198,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("ModelId");
 
                     b.HasIndex("BrandId");
 
@@ -209,7 +209,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
             modelBuilder.Entity("Backend.Data.Entities.ProductPhoto", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ModelId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -223,7 +223,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                     b.Property<string>("Url")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("ModelId");
 
                     b.HasIndex("ProductId");
 
@@ -232,7 +232,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
             modelBuilder.Entity("Backend.Data.Entities.ProductType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ModelId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -245,38 +245,38 @@ namespace Backend.PostgresSqlMigrations.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("boolean");
 
-                    b.HasKey("Id");
+                    b.HasKey("ModelId");
 
                     b.ToTable("ProductType");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            ModelId = 1,
                             Name = "Thời Trang Nam",
                             Status = true
                         },
                         new
                         {
-                            Id = 2,
+                            ModelId = 2,
                             Name = "Thời Trang Nữ",
                             Status = true
                         },
                         new
                         {
-                            Id = 3,
+                            ModelId = 3,
                             Name = "Điện Thoại - Phụ Kiện",
                             Status = true
                         },
                         new
                         {
-                            Id = 4,
+                            ModelId = 4,
                             Name = "Máy Tính - Laptop",
                             Status = true
                         },
                         new
                         {
-                            Id = 5,
+                            ModelId = 5,
                             Name = "Đồng Hồ",
                             Status = true
                         });
@@ -284,7 +284,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
             modelBuilder.Entity("Backend.Data.Entities.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ModelId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -298,26 +298,26 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         .HasColumnType("character varying(20)")
                         .HasMaxLength(20);
 
-                    b.HasKey("Id");
+                    b.HasKey("ModelId");
 
                     b.ToTable("Role");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            ModelId = 1,
                             Description = "Quản trị viên",
                             Name = "Admin"
                         },
                         new
                         {
-                            Id = 2,
+                            ModelId = 2,
                             Description = "Người bán hàng",
                             Name = "Partner"
                         },
                         new
                         {
-                            Id = 3,
+                            ModelId = 3,
                             Description = "Người dùng đã đăng ký",
                             Name = "User"
                         });
@@ -325,7 +325,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
             modelBuilder.Entity("Backend.Data.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ModelId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
@@ -385,14 +385,14 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
 
-                    b.HasKey("Id");
+                    b.HasKey("ModelId");
 
                     b.ToTable("User");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            ModelId = 1,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hieutanmy321@gmail.com",
@@ -406,7 +406,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         },
                         new
                         {
-                            Id = 2,
+                            ModelId = 2,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hieuvo@gmail.com",
@@ -419,7 +419,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            ModelId = 3,
                             Address = "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM",
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "dat@gmail.com",

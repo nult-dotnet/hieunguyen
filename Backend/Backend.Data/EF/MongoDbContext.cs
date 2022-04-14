@@ -13,17 +13,19 @@ namespace Backend.Data.EF
         public IClientSessionHandle Session { get; set; }
         public MongoClient MongoClient { get; set; }
         private readonly List<Func<Task>> _commands;
-        private readonly IConfiguration _configuration;
+        private readonly IConfigurationRoot _configuration;
 
         public MongoDbContext()
         {
-
+            _configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build(); ;
+            _commands = new List<Func<Task>>();
         }
 
-        public MongoDbContext(IConfiguration configuration)
+        public MongoDbContext(IConfigurationRoot configuration)
         {
             _configuration = configuration;
-
             // Every command will be stored and it'll be processed at SaveChanges
             _commands = new List<Func<Task>>();
         }
@@ -37,22 +39,13 @@ namespace Backend.Data.EF
         public async Task<int> SaveChangeAsync()
         {
             ConfigureMongo();
-
-            using (Session = await MongoClient.StartSessionAsync())
-            {
-                Session.StartTransaction();
-
-                var commandTasks = _commands.Select(c => c());
-
-                await Task.WhenAll(commandTasks);
-
-                await Session.CommitTransactionAsync();
-            }
+            var commandTasks = _commands.Select(c => c());
+            await Task.WhenAll(commandTasks);
 
             return _commands.Count;
         }
 
-        private void ConfigureMongo()
+        public void ConfigureMongo()
         {
             if (MongoClient != null)
             {
@@ -60,9 +53,9 @@ namespace Backend.Data.EF
             }
 
             // Configure mongo (You can inject the config, just to simplify)
-            MongoClient = new MongoClient(_configuration["MongoDB:ConnectionString"]);
+            MongoClient = new MongoClient(_configuration["MongoDb:ConnectionString"]);
 
-            Database = MongoClient.GetDatabase(_configuration["DatabaseName:DatabaseName"]);
+            Database = MongoClient.GetDatabase(_configuration["MongoDb:DatabaseName"]);
         }
 
         public IMongoCollection<T> GetCollection<T>(string name)

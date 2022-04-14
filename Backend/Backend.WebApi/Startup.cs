@@ -139,8 +139,9 @@ namespace Backend.WebApi
 
             // For use BackendDbContext
             services.AddDbContext<BackendDbContext>();
-
             services.AddScoped<IMongoDbContext, MongoDbContext>();
+
+
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IBrandService, BrandService>();

@@ -44,7 +44,7 @@ namespace Backend.Repository.Generic
             _context.Set<T>().Update(entity);
         }
 
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
+        public IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
             return _context.Set<T>().Where(expression).AsNoTracking();
         }

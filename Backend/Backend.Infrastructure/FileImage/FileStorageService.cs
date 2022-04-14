@@ -70,9 +70,9 @@ namespace Backend.Infrastructure.FileImage
         public string CreateProductPath(int cateId, string productName)
         {
             var query = from c in _context.Categories
-                where c.Id.Equals(cateId)
+                where c.ModelId.Equals(cateId)
                 join t in _context.ProductTypes
-                    on c.ProductTypeId equals t.Id
+                    on c.ProductTypeId equals t.ModelId
                 select new
                 {
                     C = c.Name,

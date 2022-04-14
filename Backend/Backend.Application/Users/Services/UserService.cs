@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Backend.Application.Common.Models;
@@ -35,12 +36,12 @@ namespace Backend.Application.Users.Services
 
         public async Task<ApiResult<string>> CreateAsync(CreateUserResource request)
         {
-            var userEmail = await _userRepository
+            var userEmail = _userRepository
                 .FindByCondition(x => x.Email == request.Email)
-                .SingleOrDefaultAsync();
-            var listUser = await _userRepository
+                .SingleOrDefault();
+            var listUser = _userRepository
                 .FindByCondition(x => x.UserName.Equals(request.UserName) && x.Status != UserStatus.DELETED)
-                .ToListAsync();
+                .ToList();
 
             if (userEmail != null || listUser.Count > 0)
             {
@@ -59,7 +60,7 @@ namespace Backend.Application.Users.Services
                 await _unitOfWork.SaveChangesAsync();
                 await _userRoleRepository.CreateAsync(new UserRole()
                 {
-                    UserId = user.Id,
+                    UserId = user.ModelId,
                     RoleId = 3
                 });
                 await _unitOfWork.SaveChangesAsync();
@@ -89,11 +90,11 @@ namespace Backend.Application.Users.Services
 
         public async Task<ApiResult<List<UserVm>>> GetAllAsync()
         {
-            var users = await _userRepository
+            var users = _userRepository
                 .FindByCondition(x => x.Status != UserStatus.DELETED)
-                .ToListAsync();
+                .ToList();
 
-            if (users is null)
+            if (users.Count == 0)
             {
                 return new ApiErrorResult<List<UserVm>>("Không tìm thấy được người dùng nào.");
             }
@@ -158,6 +159,7 @@ namespace Backend.Application.Users.Services
 
             user.ModifiedBy = username;
             request.ApplyTo(user);
+            _userRepository.Update(user);
 
             await _unitOfWork.SaveChangesAsync();
 

@@ -7,6 +7,7 @@ using Backend.Application.Brands.Models;
 using Backend.Application.Brands.Queries.GetAllBrand;
 using Backend.Application.Brands.Queries.GetBrandById;
 using Backend.Application.Brands.Queries.GetBrandByOwnerUser;
+using Backend.Data.Entities;
 using Backend.Utilities.SystemConstants;
 using Backend.WebApi.ActionFilters;
 using Backend.WebApi.AuthorizeRoles;
@@ -40,7 +41,7 @@ namespace Backend.WebApi.Controllers
 
         [HttpPatch("update/{id}")]
         [AuthorizeRoles(Constants.ADMIN, Constants.PARTNER)]
-        public async Task<IActionResult> UpdatePatch(int id, JsonPatchDocument request)
+        public async Task<IActionResult> UpdatePatch(int id, [FromBody]JsonPatchDocument request)
         {
             var model = new UpdateBrandPatchCommand(id, request);
             return Ok(await _mediator.Send(model));

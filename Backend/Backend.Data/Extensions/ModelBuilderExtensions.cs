@@ -13,7 +13,7 @@ namespace Backend.Data.Extensions
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
-                    Id = 1,
+                    ModelId = 1,
                     UserName = "hieunguyen",
                     PasswordHash = Encryptor.SHA256Hash("Hieu@123"),
                     FirstMiddleName = "Nguyễn Trung",
@@ -26,7 +26,7 @@ namespace Backend.Data.Extensions
                 },
                 new User
                 {
-                    Id = 2,
+                    ModelId = 2,
                     UserName = "hieuvo",
                     PasswordHash = Encryptor.SHA256Hash("Hieu@123"),
                     FirstMiddleName = "Võ Trọng",
@@ -38,7 +38,7 @@ namespace Backend.Data.Extensions
                 },
                 new User
                 {
-                    Id = 3,
+                    ModelId = 3,
                     UserName = "datle",
                     PasswordHash = Encryptor.SHA256Hash("Hieu@123"),
                     FirstMiddleName = "Lê Tấn",
@@ -53,19 +53,19 @@ namespace Backend.Data.Extensions
             modelBuilder.Entity<Role>().HasData(
                 new Role
                 {
-                    Id = 1,
+                    ModelId = 1,
                     Name = "Admin",
                     Description = "Quản trị viên"
                 },
                 new Role
                 {
-                    Id = 2,
+                    ModelId = 2,
                     Name = "Partner",
                     Description = "Người bán hàng"
                 },
                 new Role
                 {
-                    Id = 3,
+                    ModelId = 3,
                     Name = "User",
                     Description = "Người dùng đã đăng ký"
                 }
@@ -91,31 +91,31 @@ namespace Backend.Data.Extensions
             modelBuilder.Entity<ProductType>().HasData(
                 new ProductType
                 {
-                    Id = 1,
+                    ModelId = 1,
                     Name = "Thời Trang Nam",
                     Status = true
                 },
                 new ProductType
                 {
-                    Id = 2,
+                    ModelId = 2,
                     Name = "Thời Trang Nữ",
                     Status = true
                 },
                 new ProductType
                 {
-                    Id = 3,
+                    ModelId = 3,
                     Name = "Điện Thoại - Phụ Kiện",
                     Status = true
                 },
                 new ProductType
                 {
-                    Id = 4,
+                    ModelId = 4,
                     Name = "Máy Tính - Laptop",
                     Status = true
                 },
                 new ProductType
                 {
-                    Id = 5,
+                    ModelId = 5,
                     Name = "Đồng Hồ",
                     Status = true
                 }
@@ -123,7 +123,7 @@ namespace Backend.Data.Extensions
             modelBuilder.Entity<Category>().HasData(
                 new Category
                 {
-                    Id = 1,
+                    ModelId = 1,
                     Alias = "laptop-dell",
                     CreatedBy = "hieunguyen",
                     CreatedDate = DateTime.Now,
@@ -134,7 +134,7 @@ namespace Backend.Data.Extensions
                 },
                 new Category
                 {
-                    Id = 2,
+                    ModelId = 2,
                     Alias = "laptop-macbook",
                     CreatedBy = "hieunguyen",
                     CreatedDate = DateTime.Now,
@@ -145,7 +145,7 @@ namespace Backend.Data.Extensions
                 },
                 new Category
                 {
-                    Id = 3,
+                    ModelId = 3,
                     Alias = "laptop-hp",
                     CreatedBy = "hieunguyen",
                     CreatedDate = DateTime.Now,
@@ -156,7 +156,7 @@ namespace Backend.Data.Extensions
                 },
                 new Category
                 {
-                    Id = 4,
+                    ModelId = 4,
                     Alias = "laptop-acer",
                     CreatedBy = "hieunguyen",
                     CreatedDate = DateTime.Now,
@@ -167,7 +167,7 @@ namespace Backend.Data.Extensions
                 },
                 new Category
                 {
-                    Id = 5,
+                    ModelId = 5,
                     Alias = "laptop-asus",
                     CreatedBy = "hieunguyen",
                     CreatedDate = DateTime.Now,

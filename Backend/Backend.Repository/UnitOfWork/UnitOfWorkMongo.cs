@@ -10,9 +10,9 @@ namespace Backend.Repository.UnitOfWork
         private readonly IMongoDbContext _context;
         private Dictionary<string, object> _repositories;
 
-        public UnitOfWorkMongo()
+        public UnitOfWorkMongo(IMongoDbContext context)
         {
-            _context = new MongoDbContext();
+            _context = context;
         }
 
         public async Task<int> SaveChangesAsync()

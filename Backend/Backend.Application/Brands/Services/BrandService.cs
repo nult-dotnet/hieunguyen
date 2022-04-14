@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -37,9 +38,9 @@ namespace Backend.Application.Brands.Services
 
         public async Task<ApiResult<List<Brand>>> GetAllAsync()
         {
-            var listBrand = await _brandRepository
+            var listBrand = _brandRepository
                 .FindByCondition(x => x.Status != (int)BrandStatus.STOP)
-                .ToListAsync();
+                .ToList();
 
             return await Task.FromResult(new ApiSuccessResult<List<Brand>>(listBrand));
         }
@@ -54,9 +55,9 @@ namespace Backend.Application.Brands.Services
         public async Task<ApiResult<Brand>> GetByOwnerUser()
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var brand = await _brandRepository
+            var brand = _brandRepository
                 .FindByCondition(x => x.UserId.Equals(int.Parse(userId)))
-                .SingleOrDefaultAsync();
+                .SingleOrDefault();
 
             return await Task.FromResult(new ApiSuccessResult<Brand>(brand));
         }
@@ -65,9 +66,9 @@ namespace Backend.Application.Brands.Services
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var currentBrand = await _brandRepository
+            var currentBrand = _brandRepository
                 .FindByCondition(x => x.Name == resource.Name && x.Status!=(int) BrandStatus.STOP)
-                .SingleOrDefaultAsync();
+                .SingleOrDefault();
 
             var isAdmin = _httpContextAccessor.HttpContext.User.IsInRole(Constants.ADMIN);
             var isPartner = _httpContextAccessor.HttpContext.User.IsInRole(Constants.PARTNER);
@@ -91,22 +92,17 @@ namespace Backend.Application.Brands.Services
                         RoleId = 2
                     });
                 }
-                else
-                {
-                    return await Task.FromResult(new ApiErrorResult<Brand>("Người dùng đã có thương thiệu"));
-                }
-
             }
 
             brand.TotalRate = 0;
 
-            var role = await _userRoleRepository
+            var role = _userRoleRepository
                 .FindByCondition(x => x.UserId == brand.UserId && x.RoleId == 2)
-                .SingleOrDefaultAsync();
+                .SingleOrDefault();
 
-            await _brandRepository.CreateAsync(brand);
             if (role is null)
             {
+                await _brandRepository.CreateAsync(brand);
                 await _userRoleRepository.CreateAsync(new UserRole()
                 {
                     UserId = brand.UserId,
@@ -115,7 +111,18 @@ namespace Backend.Application.Brands.Services
             }
             else
             {
-                return await Task.FromResult(new ApiErrorResult<Brand>("Người dùng đã có thương thiệu"));
+                var existBrand = _brandRepository
+                    .FindByCondition(x => x.UserId == resource.UserId && x.Status != (int)BrandStatus.STOP)
+                    .SingleOrDefault();
+
+                if (existBrand is null)
+                {
+                    await _brandRepository.CreateAsync(brand);
+                }
+                else
+                {
+                    return await Task.FromResult(new ApiErrorResult<Brand>("Người dùng đã có thương hiệu"));
+                }
             }
             await _unitOfWork.SaveChangesAsync();
 
@@ -130,6 +137,7 @@ namespace Backend.Application.Brands.Services
             try
             {
                 patchDocument.ApplyTo(brand);
+                _brandRepository.Update(brand);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception e)

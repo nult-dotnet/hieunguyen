@@ -10,9 +10,9 @@ namespace Backend.Data.Configurations
         {
             builder.ToTable("Brand");
 
-            builder.HasKey(x => x.Id);
+            builder.HasKey(x => x.ModelId);
 
-            builder.Property(x => x.Id)
+            builder.Property(x => x.ModelId)
                 .UseIdentityColumn()
                 .ValueGeneratedOnAdd();
 

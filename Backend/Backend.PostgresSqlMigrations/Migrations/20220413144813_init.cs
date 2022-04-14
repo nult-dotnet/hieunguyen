@@ -12,35 +12,35 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 name: "ProductType",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ModelId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Status = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductType", x => x.Id);
+                    table.PrimaryKey("PK_ProductType", x => x.ModelId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Role",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ModelId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(maxLength: 20, nullable: false),
                     Description = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Role", x => x.Id);
+                    table.PrimaryKey("PK_Role", x => x.ModelId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ModelId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserName = table.Column<string>(maxLength: 100, nullable: false),
                     PasswordHash = table.Column<string>(nullable: true),
@@ -59,14 +59,14 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.ModelId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Category",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ModelId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Alias = table.Column<string>(maxLength: 100, nullable: false),
@@ -78,12 +78,12 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.PrimaryKey("PK_Category", x => x.ModelId);
                     table.ForeignKey(
                         name: "FK_Category_ProductType_ProductTypeId",
                         column: x => x.ProductTypeId,
                         principalTable: "ProductType",
-                        principalColumn: "Id",
+                        principalColumn: "ModelId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -91,7 +91,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 name: "Brand",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ModelId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(maxLength: 20, nullable: false),
                     TotalRate = table.Column<double>(nullable: false),
@@ -103,12 +103,12 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Brand", x => x.Id);
+                    table.PrimaryKey("PK_Brand", x => x.ModelId);
                     table.ForeignKey(
                         name: "FK_Brand_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
+                        principalColumn: "ModelId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -126,13 +126,13 @@ namespace Backend.PostgresSqlMigrations.Migrations
                         name: "FK_UserRole_Role_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Role",
-                        principalColumn: "Id",
+                        principalColumn: "ModelId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserRole_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
+                        principalColumn: "ModelId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -140,7 +140,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 name: "Product",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ModelId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
@@ -157,18 +157,18 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product", x => x.Id);
+                    table.PrimaryKey("PK_Product", x => x.ModelId);
                     table.ForeignKey(
                         name: "FK_Product_Brand_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brand",
-                        principalColumn: "Id",
+                        principalColumn: "ModelId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Product_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
-                        principalColumn: "Id",
+                        principalColumn: "ModelId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -176,7 +176,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 name: "ProductPhoto",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ModelId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ProductId = table.Column<int>(nullable: false),
                     Url = table.Column<string>(nullable: true),
@@ -184,18 +184,18 @@ namespace Backend.PostgresSqlMigrations.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductPhoto", x => x.Id);
+                    table.PrimaryKey("PK_ProductPhoto", x => x.ModelId);
                     table.ForeignKey(
                         name: "FK_ProductPhoto_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
-                        principalColumn: "Id",
+                        principalColumn: "ModelId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
                 table: "ProductType",
-                columns: new[] { "Id", "Name", "Status" },
+                columns: new[] { "ModelId", "Name", "Status" },
                 values: new object[,]
                 {
                     { 1, "Thời Trang Nam", true },
@@ -207,7 +207,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
             migrationBuilder.InsertData(
                 table: "Role",
-                columns: new[] { "Id", "Description", "Name" },
+                columns: new[] { "ModelId", "Description", "Name" },
                 values: new object[,]
                 {
                     { 1, "Quản trị viên", "Admin" },
@@ -217,7 +217,7 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
             migrationBuilder.InsertData(
                 table: "User",
-                columns: new[] { "Id", "Address", "Birthday", "CreatedBy", "CreatedDate", "Email", "FirstMiddleName", "Gender", "LastName", "ModifiedBy", "ModifiedDate", "PasswordHash", "PhoneNumber", "Status", "UserName" },
+                columns: new[] { "ModelId", "Address", "Birthday", "CreatedBy", "CreatedDate", "Email", "FirstMiddleName", "Gender", "LastName", "ModifiedBy", "ModifiedDate", "PasswordHash", "PhoneNumber", "Status", "UserName" },
                 values: new object[,]
                 {
                     { 1, "KTX Cỏ May, khu phố 6, phường Linh Trung, quận Thủ Đức, TP.HCM", null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "hieutanmy321@gmail.com", "Nguyễn Trung", 0, "Hiếu", null, null, "9761509327fd5beca49c1c588df59ef8dc957a3e4ef6870190589455e8c60045", "0965924083", 0, "hieunguyen" },
@@ -227,14 +227,14 @@ namespace Backend.PostgresSqlMigrations.Migrations
 
             migrationBuilder.InsertData(
                 table: "Category",
-                columns: new[] { "Id", "Alias", "CreatedBy", "CreatedDate", "ModifiedBy", "ModifiedDate", "Name", "ProductTypeId" },
+                columns: new[] { "ModelId", "Alias", "CreatedBy", "CreatedDate", "ModifiedBy", "ModifiedDate", "Name", "ProductTypeId" },
                 values: new object[,]
                 {
-                    { 1, "laptop-dell", "hieunguyen", new DateTime(2022, 4, 11, 21, 24, 35, 765, DateTimeKind.Local).AddTicks(7555), null, null, "Laptop Dell", 4 },
-                    { 2, "laptop-macbook", "hieunguyen", new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4556), null, null, "Laptop Macbook", 4 },
-                    { 3, "laptop-hp", "hieunguyen", new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4617), null, null, "Laptop HP", 4 },
-                    { 4, "laptop-acer", "hieunguyen", new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4620), null, null, "Laptop Acer", 4 },
-                    { 5, "laptop-asus", "hieunguyen", new DateTime(2022, 4, 11, 21, 24, 35, 766, DateTimeKind.Local).AddTicks(4622), null, null, "Laptop Asus", 4 }
+                    { 1, "laptop-dell", "hieunguyen", new DateTime(2022, 4, 13, 21, 48, 12, 765, DateTimeKind.Local).AddTicks(9085), null, null, "Laptop Dell", 4 },
+                    { 2, "laptop-macbook", "hieunguyen", new DateTime(2022, 4, 13, 21, 48, 12, 766, DateTimeKind.Local).AddTicks(6025), null, null, "Laptop Macbook", 4 },
+                    { 3, "laptop-hp", "hieunguyen", new DateTime(2022, 4, 13, 21, 48, 12, 766, DateTimeKind.Local).AddTicks(6080), null, null, "Laptop HP", 4 },
+                    { 4, "laptop-acer", "hieunguyen", new DateTime(2022, 4, 13, 21, 48, 12, 766, DateTimeKind.Local).AddTicks(6083), null, null, "Laptop Acer", 4 },
+                    { 5, "laptop-asus", "hieunguyen", new DateTime(2022, 4, 13, 21, 48, 12, 766, DateTimeKind.Local).AddTicks(6085), null, null, "Laptop Asus", 4 }
                 });
 
             migrationBuilder.InsertData(

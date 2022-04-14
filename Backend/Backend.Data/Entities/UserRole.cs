@@ -1,5 +1,8 @@
-﻿namespace Backend.Data.Entities
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace Backend.Data.Entities
 {
+    [BsonIgnoreExtraElements]
     public class UserRole
     {
         public int UserId { get; set; }

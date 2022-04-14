@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Backend.Data.Entities
 {
+    [BsonIgnoreExtraElements]
     public class Brand
     {
-        public int Id { get; set; }
+        public int ModelId { get; set; }
         public string Name { get; set; }
         public double TotalRate { get; set; }
         public string Description { get; set; }

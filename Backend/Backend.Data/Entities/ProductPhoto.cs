@@ -1,8 +1,11 @@
-﻿namespace Backend.Data.Entities
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace Backend.Data.Entities
 {
+    [BsonIgnoreExtraElements]
     public class ProductPhoto
     {
-        public int Id { get; set; }
+        public int ModelId { get; set; }
 
         public int ProductId { get; set; }
 
